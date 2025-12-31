@@ -35,7 +35,7 @@ export default function PreviewPanel() {
                             <script src="https://cdn.tailwindcss.com"></script>
                             <style>
                                 @page { size: A4; margin: 0; }
-                                body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                                body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; zoom: 1.25; }
                             </style>
                         </head>
                         <body>

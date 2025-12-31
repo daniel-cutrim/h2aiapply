@@ -136,8 +136,8 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                             <ul className="space-y-2">
                                 {data.idiomas.map((lang, i) => (
                                     <li key={i} className="flex justify-between border-b border-gray-200 pb-1 last:border-0">
-                                        <span>{lang.idioma}</span>
-                                        <span className="font-bold" style={{ color: 'var(--color-secondary)' }}>{lang.nivel}</span>
+                                        <span className="text-gray-900">{lang.idioma}</span>
+                                        <span className="font-bold text-gray-800" style={{ color: 'var(--color-secondary)' }}>{lang.nivel}</span>
                                     </li>
                                 ))}
                             </ul>

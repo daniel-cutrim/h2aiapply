@@ -115,65 +115,7 @@ export default function EditPanel() {
                         </div>
 
                         {/* Add more sections for Experience, Education etc. here */}
-                        {/* Certificações */}
-                        <div className="space-y-4 pt-4 border-t">
-                            <h3 className="font-bold text-gray-900">Certificações</h3>
-                            <p className="text-xs text-gray-700">Liste suas certificações em texto livre.</p>
-                            <textarea
-                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
-                                value={typeof dados.certificacoes === 'string' ? dados.certificacoes : ''}
-                                onChange={(e) => updateDados({ certificacoes: e.target.value })}
-                                placeholder="Bachelor's Degree&#10;Unifael&#10;Completed in 2025"
-                            />
-                        </div>
 
-                        {/* Idiomas */}
-                        <div className="space-y-4 pt-4 border-t">
-                            <h3 className="font-bold text-gray-900">Idiomas</h3>
-                            <div className="grid gap-4">
-                                {(dados.idiomas || []).map((lang, index) => (
-                                    <div key={lang.idioma} className="flex items-center justify-between border p-3 rounded-lg bg-gray-50">
-                                        <span className="font-medium">{lang.idioma}</span>
-                                        <div className="w-[180px]">
-                                            <select
-                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
-                                                value={lang.nivel}
-                                                onChange={(e) => {
-                                                    const newIdiomas = [...(dados.idiomas || [])];
-                                                    // Ensure array is initialized if index is out of bounds (which shouldn't happen with fixed list but safe to check)
-                                                    if (!newIdiomas[index]) return;
-
-                                                    newIdiomas[index] = { ...newIdiomas[index], nivel: e.target.value as any };
-                                                    updateDados({ idiomas: newIdiomas });
-                                                }}
-                                            >
-                                                <option value="">Selecione...</option>
-                                                <option value="Studying">Studying</option>
-                                                <option value="Basic">Basic</option>
-                                                <option value="Intermediate">Intermediate</option>
-                                                <option value="Advanced">Advanced</option>
-                                                <option value="Native">Native</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                ))}
-                                {/* Fallback initialization button if old resume */}
-                                {(!dados.idiomas || dados.idiomas.length === 0) && (
-                                    <Button
-                                        variant="outline"
-                                        onClick={() => updateDados({
-                                            idiomas: [
-                                                { idioma: 'Portuguese', nivel: '' },
-                                                { idioma: 'English', nivel: '' },
-                                                { idioma: 'Spanish', nivel: '' }
-                                            ]
-                                        })}
-                                    >
-                                        Inicializar Idiomas
-                                    </Button>
-                                )}
-                            </div>
-                        </div>
 
                         {/* Experiências */}
                         <div className="space-y-4 pt-4 border-t">
@@ -350,7 +292,7 @@ export default function EditPanel() {
                                         <span className="font-medium">{lang.idioma}</span>
                                         <div className="w-[180px]">
                                             <select
-                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
                                                 value={lang.nivel}
                                                 onChange={(e) => {
                                                     const newIdiomas = [...(dados.idiomas || [])];
