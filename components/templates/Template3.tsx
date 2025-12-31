@@ -18,8 +18,8 @@ export default function Template3({ data, customizacao }: TemplateProps) {
 
     return (
         <div
-            className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto p-12 text-sm flex flex-col"
-            style={containerStyle}
+            className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto p-12 text-sm flex flex-col print:print-color-adjust-exact"
+            style={{ ...containerStyle, printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact' }}
         >
             {/* Minimal Header */}
             <div className="border-b-2 border-black pb-6 mb-8 flex justify-between items-end">

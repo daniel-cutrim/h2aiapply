@@ -25,8 +25,8 @@ export default function Template2({ data, customizacao }: TemplateProps) {
 
     return (
         <div
-            className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto flex flex-col text-sm"
-            style={containerStyle}
+            className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto flex flex-col text-sm print:print-color-adjust-exact"
+            style={{ ...containerStyle, printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact' }}
         >
             {/* Heavy Header */}
             <div

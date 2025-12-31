@@ -49,42 +49,69 @@ export default function EditPanel() {
                             <h3 className="font-bold text-gray-900">Informações Pessoais</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>Nome</Label>
+                                    <Label className="text-gray-900">Nome</Label>
                                     <Input
+                                        className="text-gray-900 bg-white"
                                         value={dados.pessoal.nome || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, nome: e.target.value } })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Sobrenome</Label>
+                                    <Label className="text-gray-900">Sobrenome</Label>
                                     <Input
+                                        className="text-gray-900 bg-white"
                                         value={dados.pessoal.sobrenome || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, sobrenome: e.target.value } })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Email</Label>
+                                    <Label className="text-gray-900">Email</Label>
                                     <Input
+                                        className="text-gray-900 bg-white"
                                         value={dados.pessoal.email || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, email: e.target.value } })}
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Telefone</Label>
+                                    <Label className="text-gray-900">Telefone</Label>
                                     <Input
+                                        className="text-gray-900 bg-white"
                                         value={dados.pessoal.telefone || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, telefone: e.target.value } })}
                                     />
                                 </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label>Perfil Profissional</Label>
-                                <textarea
-                                    className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
-                                    value={dados.resumo || ''}
-                                    onChange={(e) => updateDados({ resumo: e.target.value })}
-                                />
+                            <div className="grid grid-cols-2 gap-4 pt-2">
+                                <div className="space-y-2 col-span-2">
+                                    <Label className="text-gray-900">Localização (Cidade/País)</Label>
+                                    <Input
+                                        className="text-gray-900 bg-white"
+                                        value={dados.pessoal.localizacao || ''}
+                                        onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, localizacao: e.target.value } })}
+                                    />
+                                </div>
                             </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label className="text-gray-900">Perfil Profissional</Label>
+                            <textarea
+                                className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                                value={dados.resumo || ''}
+                                onChange={(e) => updateDados({ resumo: e.target.value })}
+                            />
+                        </div>
+
+
+                        {/* Skills - Habilidades */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-bold text-gray-900">Habilidades</h3>
+                            <p className="text-xs text-gray-500">Liste suas habilidades (uma por linha)</p>
+                            <textarea
+                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                                value={dados.skills.join('\n')}
+                                onChange={(e) => updateDados({ skills: e.target.value.split('\n') })}
+                                placeholder="React&#10;Node.js&#10;TypeScript"
+                            />
                         </div>
 
                         {/* Add more sections for Experience, Education etc. here */}
@@ -109,7 +136,7 @@ export default function EditPanel() {
                                         <span className="font-medium">{lang.idioma}</span>
                                         <div className="w-[180px]">
                                             <select
-                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
                                                 value={lang.nivel}
                                                 onChange={(e) => {
                                                     const newIdiomas = [...(dados.idiomas || [])];
@@ -193,8 +220,9 @@ export default function EditPanel() {
 
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="space-y-1">
-                                            <Label className="text-xs">Cargo</Label>
+                                            <Label className="text-xs text-gray-900">Cargo</Label>
                                             <Input
+                                                className="text-gray-900 bg-white"
                                                 value={exp.cargo}
                                                 onChange={(e) => {
                                                     const newExp = [...dados.experiencias];
@@ -204,8 +232,9 @@ export default function EditPanel() {
                                             />
                                         </div>
                                         <div className="space-y-1">
-                                            <Label className="text-xs">Empresa</Label>
+                                            <Label className="text-xs text-gray-900">Empresa</Label>
                                             <Input
+                                                className="text-gray-900 bg-white"
                                                 value={exp.empresa}
                                                 onChange={(e) => {
                                                     const newExp = [...dados.experiencias];
@@ -216,8 +245,9 @@ export default function EditPanel() {
                                         </div>
                                     </div>
                                     <div className="space-y-1">
-                                        <Label className="text-xs">Período</Label>
+                                        <Label className="text-xs text-gray-900">Período</Label>
                                         <Input
+                                            className="text-gray-900 bg-white"
                                             value={exp.periodo}
                                             onChange={(e) => {
                                                 const newExp = [...dados.experiencias];
@@ -229,7 +259,7 @@ export default function EditPanel() {
 
                                     <div className="space-y-2">
                                         <div className="flex justify-between items-end">
-                                            <Label className="text-xs">Descrição / Atividades</Label>
+                                            <Label className="text-xs text-gray-900">Descrição / Atividades</Label>
                                             <div className="flex bg-slate-200 rounded p-0.5">
                                                 <button
                                                     className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'texto' ? 'bg-white shadow' : 'text-slate-500'}`}
@@ -245,15 +275,16 @@ export default function EditPanel() {
                                                     className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'topicos' ? 'bg-white shadow' : 'text-slate-500'}`}
                                                     onClick={() => {
                                                         const newExp = [...dados.experiencias];
-                                                        // Stupid simple heuristic: split by periods if long text, or just wrap in bullet
                                                         let newDesc = exp.descricao;
-                                                        if (exp.formato === 'texto') {
-                                                            // If looks like sentences, split them
-                                                            if (newDesc.includes('.')) {
-                                                                newDesc = newDesc.split('.').map(s => s.trim()).filter(Boolean).map(s => `• ${s}`).join('\n');
-                                                            } else {
-                                                                newDesc = `• ${newDesc}`;
-                                                            }
+                                                        // Convert only if coming from text to topics, or force formatting
+                                                        if (exp.formato === 'texto' || exp.formato === 'topicos') {
+                                                            // Split by newline to respect user's line breaks
+                                                            const lines = newDesc.split('\n');
+                                                            newDesc = lines
+                                                                .map(l => l.trim())
+                                                                .filter(Boolean)
+                                                                .map(l => l.startsWith('•') ? l : `• ${l}`)
+                                                                .join('\n');
                                                         }
                                                         newExp[index] = { ...exp, formato: 'topicos', descricao: newDesc };
                                                         updateDados({ experiencias: newExp });
@@ -264,12 +295,33 @@ export default function EditPanel() {
                                             </div>
                                         </div>
                                         <textarea
-                                            className="min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+                                            className="min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
                                             value={exp.descricao}
                                             onChange={(e) => {
                                                 const newExp = [...dados.experiencias];
                                                 newExp[index] = { ...exp, descricao: e.target.value };
                                                 updateDados({ experiencias: newExp });
+                                            }}
+                                            onKeyDown={(e) => {
+                                                if (exp.formato === 'topicos' && e.key === 'Enter') {
+                                                    e.preventDefault();
+                                                    const textarea = e.currentTarget;
+                                                    const start = textarea.selectionStart;
+                                                    const end = textarea.selectionEnd;
+                                                    const value = textarea.value;
+                                                    const newValue = value.substring(0, start) + '\n• ' + value.substring(end);
+
+                                                    const newExp = [...dados.experiencias];
+                                                    newExp[index] = { ...exp, descricao: newValue };
+                                                    updateDados({ experiencias: newExp });
+
+                                                    // Need to set cursor position after render, but React state update is async.
+                                                    // This is a bit advanced for a simple textarea. 
+                                                    // But let's try a simple approach: setTimeout?
+                                                    setTimeout(() => {
+                                                        textarea.selectionStart = textarea.selectionEnd = start + 3;
+                                                    }, 0);
+                                                }
                                             }}
                                         />
                                     </div>
@@ -282,7 +334,7 @@ export default function EditPanel() {
                             <h3 className="font-bold text-gray-900">Certificações</h3>
                             <p className="text-xs text-gray-500">Liste suas certificações em texto livre.</p>
                             <textarea
-                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900"
                                 value={typeof dados.certificacoes === 'string' ? dados.certificacoes : ''}
                                 onChange={(e) => updateDados({ certificacoes: e.target.value })}
                                 placeholder="Bachelor's Degree&#10;Unifael&#10;Completed in 2025"
@@ -368,7 +420,7 @@ export default function EditPanel() {
                             <h3 className="font-bold text-gray-900">Cores</h3>
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <Label>Cor Primária</Label>
+                                    <Label className="text-gray-900">Cor Primária</Label>
                                     <div className="flex gap-2">
                                         <Input
                                             type="color"
@@ -378,13 +430,14 @@ export default function EditPanel() {
                                         />
                                         <Input
                                             type="text"
+                                            className="text-gray-900 bg-white"
                                             value={customizacao.cores.primaria || ''}
                                             onChange={(e) => updateCustomizacao({ cores: { ...customizacao.cores, primaria: e.target.value } })}
                                         />
                                     </div>
                                 </div>
                                 <div className="space-y-2">
-                                    <Label>Cor Secundária</Label>
+                                    <Label className="text-gray-900">Cor Secundária</Label>
                                     <div className="flex gap-2">
                                         <Input
                                             type="color"
@@ -394,6 +447,7 @@ export default function EditPanel() {
                                         />
                                         <Input
                                             type="text"
+                                            className="text-gray-900 bg-white"
                                             value={customizacao.cores.secundaria || ''}
                                             onChange={(e) => updateCustomizacao({ cores: { ...customizacao.cores, secundaria: e.target.value } })}
                                         />
