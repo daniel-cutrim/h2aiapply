@@ -51,28 +51,28 @@ export default function EditPanel() {
                                 <div className="space-y-2">
                                     <Label>Nome</Label>
                                     <Input
-                                        value={dados.pessoal.nome}
+                                        value={dados.pessoal.nome || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, nome: e.target.value } })}
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Sobrenome</Label>
                                     <Input
-                                        value={dados.pessoal.sobrenome}
+                                        value={dados.pessoal.sobrenome || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, sobrenome: e.target.value } })}
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Email</Label>
                                     <Input
-                                        value={dados.pessoal.email}
+                                        value={dados.pessoal.email || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, email: e.target.value } })}
                                     />
                                 </div>
                                 <div className="space-y-2">
                                     <Label>Telefone</Label>
                                     <Input
-                                        value={dados.pessoal.telefone}
+                                        value={dados.pessoal.telefone || ''}
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, telefone: e.target.value } })}
                                     />
                                 </div>
@@ -81,7 +81,7 @@ export default function EditPanel() {
                                 <Label>Perfil Profissional</Label>
                                 <textarea
                                     className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
-                                    value={dados.perfil}
+                                    value={dados.perfil || ''}
                                     onChange={(e) => updateDados({ perfil: e.target.value })}
                                 />
                             </div>
@@ -130,13 +130,13 @@ export default function EditPanel() {
                                     <div className="flex gap-2">
                                         <Input
                                             type="color"
-                                            value={customizacao.cores.primaria}
+                                            value={customizacao.cores.primaria || '#000000'}
                                             onChange={(e) => updateCustomizacao({ cores: { ...customizacao.cores, primaria: e.target.value } })}
                                             className="w-12 h-10 p-1"
                                         />
                                         <Input
                                             type="text"
-                                            value={customizacao.cores.primaria}
+                                            value={customizacao.cores.primaria || ''}
                                             onChange={(e) => updateCustomizacao({ cores: { ...customizacao.cores, primaria: e.target.value } })}
                                         />
                                     </div>
@@ -146,13 +146,13 @@ export default function EditPanel() {
                                     <div className="flex gap-2">
                                         <Input
                                             type="color"
-                                            value={customizacao.cores.secundaria}
+                                            value={customizacao.cores.secundaria || '#000000'}
                                             onChange={(e) => updateCustomizacao({ cores: { ...customizacao.cores, secundaria: e.target.value } })}
                                             className="w-12 h-10 p-1"
                                         />
                                         <Input
                                             type="text"
-                                            value={customizacao.cores.secundaria}
+                                            value={customizacao.cores.secundaria || ''}
                                             onChange={(e) => updateCustomizacao({ cores: { ...customizacao.cores, secundaria: e.target.value } })}
                                         />
                                     </div>

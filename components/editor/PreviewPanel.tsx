@@ -5,6 +5,7 @@ import Template3 from '@/components/templates/Template3';
 import { Button } from '@/components/ui/button';
 import { Download, Loader2 } from 'lucide-react';
 import { useState } from 'react';
+import * as htmlToImage from 'html-to-image';
 
 export default function PreviewPanel() {
     const { curriculo } = useCurriculoStore();
@@ -15,39 +16,23 @@ export default function PreviewPanel() {
     const handleExport = async () => {
         setIsExporting(true);
         try {
-            // Get HTML content
             const element = document.getElementById('resume-content');
-            if (!element) return;
+            if (!element) {
+                console.error("Elemento resume-content não encontrado");
+                return;
+            }
 
-            // Basic cloning to send html string (in real app, might want to inline styles more robustly)
-            const htmlContent = element.outerHTML;
+            // Generate PNG client-side
+            const dataUrl = await htmlToImage.toPng(element, { quality: 1.0, pixelRatio: 2 });
 
-            const res = await fetch(`/api/curriculo/${curriculo.id}/export`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    html: htmlContent,
-                    token: curriculo.token
-                })
-            });
-
-            if (!res.ok) throw new Error('Falha na exportação');
-
-            // Download Blob
-            const blob = await res.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `curriculo-${curriculo.dados.pessoal.nome}.png`;
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
+            const link = document.createElement('a');
+            link.download = `curriculo-${curriculo.dados.pessoal.nome || 'download'}.png`;
+            link.href = dataUrl;
+            link.click();
 
         } catch (error) {
-            console.error(error);
-            alert('Erro ao exportar Imagem');
+            console.error('Erro ao gerar imagem:', error);
+            alert('Erro ao exportar Imagem. Tente novamente.');
         } finally {
             setIsExporting(false);
         }
@@ -58,11 +43,14 @@ export default function PreviewPanel() {
             <div className="w-full flex justify-end gap-2 px-4 max-w-[210mm]">
                 <Button onClick={handleExport} disabled={isExporting}>
                     {isExporting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Download className="w-4 h-4 mr-2" />}
-                    Exportar Imagem (HQ)
+                    Baixar Imagem (PNG)
                 </Button>
             </div>
 
-            <div className="origin-top scale-[0.5] sm:scale-[0.6] md:scale-[0.7] lg:scale-[0.8] xl:scale-100 shadow-2xl transition-transform duration-200">
+            <div
+                id="resume-content"
+                className="origin-top scale-[0.5] sm:scale-[0.6] md:scale-[0.7] lg:scale-[0.8] xl:scale-100 shadow-2xl transition-transform duration-200 bg-white"
+            >
                 {curriculo.template_id === 'template_1' && (
                     <Template1 data={curriculo.dados} customizacao={curriculo.customizacao} />
                 )}
