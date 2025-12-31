@@ -62,10 +62,13 @@ export async function POST(req: Request) {
 
         const buffer = Buffer.from(base64Pdf, 'base64');
 
+        // Sanitize filename to strict ASCII to avoid header errors
+        const safeFilename = `curriculo-${(dados.pessoal.nome || 'download').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9_-]/g, '')}.pdf`;
+
         return new NextResponse(buffer, {
             headers: {
                 'Content-Type': 'application/pdf',
-                'Content-Disposition': `attachment; filename="curriculo-${dados.pessoal.nome || 'download'}.pdf"`
+                'Content-Disposition': `attachment; filename="${safeFilename}"`
             }
         });
 
