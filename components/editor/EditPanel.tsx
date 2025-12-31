@@ -114,7 +114,17 @@ export default function EditPanel() {
                             />
                         </div>
 
-                        {/* Add more sections for Experience, Education etc. here */}
+                        {/* Educação */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-bold text-gray-900">Educação</h3>
+                            <p className="text-xs text-gray-700">Liste sua formação acadêmica.</p>
+                            <textarea
+                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                                value={typeof dados.educacao === 'string' ? dados.educacao : ''}
+                                onChange={(e) => updateDados({ educacao: e.target.value })}
+                                placeholder="Bachelor's Degree&#10;University Name&#10;2020 - 2024"
+                            />
+                        </div>
 
 
                         {/* Experiências */}
@@ -124,6 +134,7 @@ export default function EditPanel() {
                                 <Button
                                     variant="outline"
                                     size="sm"
+                                    className="text-black border-black hover:bg-gray-100"
                                     onClick={() => {
                                         const newExp = [
                                             ...(dados.experiencias || []),
@@ -289,7 +300,7 @@ export default function EditPanel() {
                             <div className="grid gap-4">
                                 {(dados.idiomas || []).map((lang, index) => (
                                     <div key={lang.idioma} className="flex items-center justify-between border p-3 rounded-lg bg-gray-50">
-                                        <span className="font-medium">{lang.idioma}</span>
+                                        <span className="font-medium text-black">{lang.idioma}</span>
                                         <div className="w-[180px]">
                                             <select
                                                 className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"

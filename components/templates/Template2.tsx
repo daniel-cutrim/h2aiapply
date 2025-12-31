@@ -102,15 +102,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                 <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
                                 Educação
                             </h3>
-                            <div className="grid grid-cols-1 gap-4">
-                                {data.educacao.map((edu, i) => (
-                                    <div key={i} className="flex flex-col">
-                                        <h4 className="font-bold">{edu.curso}</h4>
-                                        <div className="text-gray-700">{edu.instituicao}</div>
-                                        <div className="text-xs text-gray-600">{edu.periodo}</div>
-                                    </div>
-                                ))}
-                            </div>
+                            <p className="whitespace-pre-line text-gray-700">{data.educacao}</p>
                         </div>
                     )}
                 </div>

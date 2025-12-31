@@ -170,17 +170,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                     {customizacao.secoes_visiveis.educacao && data.educacao.length > 0 && (
                         <div className={`mb-6`}>
                             <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Educação</h3>
-                            <div className="flex flex-col gap-3">
-                                {data.educacao.map((edu, i) => (
-                                    <div key={i}>
-                                        <div className="flex justify-between items-baseline">
-                                            <h4 className="font-bold">{edu.curso}</h4>
-                                            <span className="text-xs">{edu.periodo}</span>
-                                        </div>
-                                        <div className="opacity-75">{edu.instituicao}</div>
-                                    </div>
-                                ))}
-                            </div>
+                            <p className="whitespace-pre-line opacity-80">{data.educacao}</p>
                         </div>
                     )}
                 </div>

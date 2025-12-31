@@ -41,7 +41,7 @@ export interface CurriculoData {
     pessoal: Pessoal;
     resumo: string;
     experiencias: Experiencia[];
-    educacao: Educacao[];
+    educacao: string;
     skills: string[]; // List of strings
     idiomas: Idioma[]; // Fixed list
     certificacoes: string; // Free text area

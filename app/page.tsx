@@ -35,7 +35,7 @@ export default function Home() {
             },
             resumo: "Resumo profissional...",
             experiencias: [],
-            educacao: [],
+            educacao: '',
             skills: ["Skill 1", "Skill 2"],
             idiomas: [
               { idioma: "Portuguese", nivel: "" },

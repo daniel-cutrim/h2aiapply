@@ -18,20 +18,30 @@ export default function Template3({ data, customizacao }: TemplateProps) {
 
     return (
         <div
-            className="w-[210mm] min-h-[297mm] bg-white shadow-xl mx-auto p-12 text-sm flex flex-col print:shadow-none print:print-color-adjust-exact"
+            className="w-[210mm] min-h-[297mm] bg-white shadow-xl mx-auto p-12 text-sm flex flex-col print:shadow-none print:print-color-adjust-exact text-black"
             style={{ ...containerStyle, printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact', border: '1px solid #e5e7eb' }}
         >
             {/* Minimal Header */}
             <div className="border-b-2 border-black pb-6 mb-8 flex justify-between items-end">
-                <div>
-                    <h1 className="text-5xl font-light tracking-tight">{data.pessoal.nome}</h1>
-                    <h1 className="text-5xl font-bold tracking-tight">{data.pessoal.sobrenome}</h1>
+                <div className="flex items-center gap-6">
+                    {data.pessoal.foto_url && (
+                        <img
+                            src={data.pessoal.foto_url}
+                            alt="Foto"
+                            className="w-32 h-32 object-cover border border-gray-200 shadow-sm grayscale contrast-125"
+                        />
+                    )}
+                    <div>
+                        <h1 className="text-5xl font-light tracking-tight">{data.pessoal.nome}</h1>
+                        <h1 className="text-5xl font-bold tracking-tight">{data.pessoal.sobrenome}</h1>
+                    </div>
                 </div>
-                <div className="text-right text-xs leading-loose">
-                    <div>{data.pessoal.email}</div>
-                    <div>{data.pessoal.telefone}</div>
-                    <div>{data.pessoal.localizacao}</div>
-                </div>
+            </div>
+
+            <div className="text-right text-xs leading-loose">
+                <div>{data.pessoal.email}</div>
+                <div>{data.pessoal.telefone}</div>
+                <div>{data.pessoal.localizacao}</div>
             </div>
 
             <div className="flex gap-12">
@@ -99,15 +109,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                     {customizacao.secoes_visiveis.educacao && (
                         <div>
                             <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Educação</h3>
-                            <div className="space-y-4">
-                                {data.educacao.map((edu, i) => (
-                                    <div key={i}>
-                                        <h4 className="font-bold">{edu.instituicao}</h4>
-                                        <div>{edu.curso}</div>
-                                        <div className="text-xs text-gray-600">{edu.periodo}</div>
-                                    </div>
-                                ))}
-                            </div>
+                            <p className="text-gray-900 whitespace-pre-line text-sm">{data.educacao}</p>
                         </div>
                     )}
                 </div>
