@@ -29,6 +29,8 @@ export async function POST(req: Request) {
             targetUrl = targetUrl.replace(/\/$/, '') + '/pdf-from-html';
         }
 
+        console.log(`[API] Calling Puppeteer at: ${targetUrl}`);
+
         const response = await fetch(targetUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -42,7 +44,13 @@ export async function POST(req: Request) {
 
         if (!response.ok) {
             const errText = await response.text();
-            throw new Error(`Erro no serviço de PDF: ${response.status} - ${errText}`);
+            console.error(`[API] Puppeteer Error: ${response.status} ${response.statusText} - ${errText}`);
+            // Return explicit error context
+            return NextResponse.json({
+                error: `Upstream Puppeteer Service Error: ${response.status}`,
+                details: errText,
+                url_used: targetUrl
+            }, { status: response.status }); // Pass through the status code (e.g., 405)
         }
 
         const data = await response.json();
