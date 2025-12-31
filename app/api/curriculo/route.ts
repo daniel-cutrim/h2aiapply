@@ -29,7 +29,10 @@ export async function POST(req: Request) {
 
         // Construct the URL (assuming deployed domain or localhost)
         // In production, use an ENV var for base URL.
-        const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+        // Construct the URL
+        const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+        const host = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL || 'localhost:3000';
+        const baseUrl = `${protocol}://${host}`;
         const url = `${baseUrl}/curriculo?token=${token}&id=${data.id}`;
 
         return NextResponse.json({

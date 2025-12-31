@@ -5,6 +5,9 @@ import Template2 from '@/components/templates/Template2';
 import Template3 from '@/components/templates/Template3';
 import { CurriculoData, Customizacao } from '@/lib/types';
 
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // Default Styles for SSR
 const DEFAULT_CUSTOMIZACAO: Customizacao = {
     cores: { primario: '#1e3a8a', secundario: '#64748b', texto: '#0f172a' } as any,
@@ -51,7 +54,7 @@ export async function POST(req: Request) {
 
         // Render React to HTML String (Server-Side)
         const componentHtml = renderToStaticMarkup(
-            <Component data={ dados as CurriculoData } customizacao = { finalCustomizacao } />
+            <Component data={dados as CurriculoData} customizacao={finalCustomizacao} />
         );
 
         // Wrap in full HTML document with Tailwind
