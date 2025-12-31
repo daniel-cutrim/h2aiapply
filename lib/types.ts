@@ -64,6 +64,7 @@ export interface Customizacao {
         certificacoes: boolean;
     };
     ordem_secoes: string[];
+    modelo_foto: 'quadrado' | 'circular';
 }
 
 export interface Curriculo {

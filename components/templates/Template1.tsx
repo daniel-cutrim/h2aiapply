@@ -63,59 +63,62 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                     }}
                 >
                     <div className="text-center">
-                        {data.pessoal.foto_url && (
-                            <img
-                                src={data.pessoal.foto_url}
-                                alt="Foto"
-                                className="w-32 h-32 rounded-full mx-auto mb-4 object-cover border-4 border-white/20"
-                            />
-                        )}
-                        <h2 className="text-lg font-bold">Contato</h2>
-                    </div>
+                        {/* Header / Sidebar Top */}
+                        <div className="flex flex-col items-center">
+                            {data.pessoal.foto_url && (
+                                <img
+                                    src={data.pessoal.foto_url}
+                                    alt="Profile"
+                                    className={`w-32 h-32 object-cover mb-4 border-2 border-white/20 ${customizacao.modelo_foto === 'circular' ? 'rounded-full' : 'rounded-lg'}`}
+                                />
+                            )}
+                        </div>
 
-                    <div className="flex flex-col gap-3 text-sm">
-                        <div className="flex items-center gap-2">
-                            <Mail className="w-4 h-4" /> <span>{data.pessoal.email}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <Phone className="w-4 h-4" /> <span>{data.pessoal.telefone}</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <MapPin className="w-4 h-4" /> <span>{data.pessoal.localizacao}</span>
-                        </div>
-                        {data.pessoal.linkedin && (
+                        <div className="flex flex-col gap-3 text-sm">
+                            <h2 className="text-lg font-bold">Contato</h2>
                             <div className="flex items-center gap-2">
-                                <Linkedin className="w-4 h-4" /> <span>{data.pessoal.linkedin}</span>
+                                <Mail className="w-4 h-4" /> <span>{data.pessoal.email}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Phone className="w-4 h-4" /> <span>{data.pessoal.telefone}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <MapPin className="w-4 h-4" /> <span>{data.pessoal.localizacao}</span>
+                            </div>
+                            {data.pessoal.linkedin && (
+                                <div className="flex items-center gap-2">
+                                    <Linkedin className="w-4 h-4" /> <span>{data.pessoal.linkedin}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        {customizacao.secoes_visiveis.skills && data.skills.length > 0 && (
+                            <div>
+                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Habilidades</h2>
+                                <div className="flex flex-wrap gap-2">
+                                    {data.skills.map((skill, i) => (
+                                        <span key={i} className="bg-white/20 px-2 py-1 rounded text-xs">
+                                            {skill}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {customizacao.secoes_visiveis.idiomas && data.idiomas.length > 0 && (
+                            <div>
+                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Idiomas</h2>
+                                <div className="flex flex-col gap-2">
+                                    {data.idiomas.map((lang, i) => (
+                                        <div key={i} className="flex justify-between">
+                                            <span>{lang.idioma}</span>
+                                            <span className="opacity-90">{lang.nivel}</span>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
-
-                    {customizacao.secoes_visiveis.skills && data.skills.length > 0 && (
-                        <div>
-                            <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Habilidades</h2>
-                            <div className="flex flex-wrap gap-2">
-                                {data.skills.map((skill, i) => (
-                                    <span key={i} className="bg-white/20 px-2 py-1 rounded text-xs">
-                                        {skill}
-                                    </span>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {customizacao.secoes_visiveis.idiomas && data.idiomas.length > 0 && (
-                        <div>
-                            <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Idiomas</h2>
-                            <div className="flex flex-col gap-2">
-                                {data.idiomas.map((lang, i) => (
-                                    <div key={i} className="flex justify-between">
-                                        <span>{lang.idioma}</span>
-                                        <span className="opacity-90">{lang.nivel}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* Main Content */}

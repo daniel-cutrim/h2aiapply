@@ -31,7 +31,26 @@ export default function Home() {
               telefone: "(11) 99999-9999",
               cargo: "Desenvolvedor de Software",
               endereco: "Rua Exemplo, 123",
-              localizacao: "São Paulo, SP"
+              localizacao: "São Paulo, SP",
+              customizacao: {
+                cores: {
+                  primaria: '#000000',
+                  secundaria: '#666666',
+                  texto: '#333333'
+                },
+                fonte: 'Arial',
+                espacamento: 'normal',
+                secoes_visiveis: {
+                  perfil: true,
+                  experiencias: true,
+                  educacao: true,
+                  skills: true,
+                  idiomas: true,
+                  certificacoes: true
+                },
+                ordem_secoes: ['perfil', 'experiencias', 'educacao', 'skills', 'idiomas', 'certificacoes'],
+                modelo_foto: 'circular'
+              }
             },
             resumo: "Resumo profissional...",
             experiencias: [],

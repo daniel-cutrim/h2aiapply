@@ -64,6 +64,62 @@ export default function EditPanel() {
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, sobrenome: e.target.value } })}
                                     />
                                 </div>
+                            </div>
+
+                            {/* Photo Upload Section */}
+                            <div className="grid grid-cols-2 gap-4 pt-2">
+                                <div className="space-y-2">
+                                    <Label className="text-gray-900">Foto do Perfil</Label>
+                                    <div className="flex items-center gap-2">
+                                        <Input
+                                            type="file"
+                                            accept="image/png, image/jpeg, image/jpg, image/webp"
+                                            className="text-gray-900 bg-white text-xs file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100"
+                                            onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                    const reader = new FileReader();
+                                                    reader.onloadend = () => {
+                                                        updateDados({ pessoal: { ...dados.pessoal, foto_url: reader.result as string } });
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            }}
+                                        />
+                                        {dados.pessoal.foto_url && (
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="text-red-500"
+                                                onClick={() => updateDados({ pessoal: { ...dados.pessoal, foto_url: '' } })}
+                                                title="Remover foto"
+                                            >
+                                                <span className="sr-only">Remover</span>
+                                                &times;
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label className="text-gray-900">Formato da Foto</Label>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => updateCustomizacao({ modelo_foto: 'circular' })}
+                                            className={`flex-1 py-2 text-xs border rounded transition-all ${customizacao.modelo_foto === 'circular' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                                        >
+                                            Circular
+                                        </button>
+                                        <button
+                                            onClick={() => updateCustomizacao({ modelo_foto: 'quadrado' })}
+                                            className={`flex-1 py-2 text-xs border rounded transition-all ${customizacao.modelo_foto === 'quadrado' ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                                        >
+                                            Quadrado
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-4 pt-2">
                                 <div className="space-y-2">
                                     <Label className="text-gray-900">Email</Label>
                                     <Input
@@ -80,8 +136,6 @@ export default function EditPanel() {
                                         onChange={(e) => updateDados({ pessoal: { ...dados.pessoal, telefone: e.target.value } })}
                                     />
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4 pt-2">
                                 <div className="space-y-2 col-span-2">
                                     <Label className="text-gray-900">Localização (Cidade/País)</Label>
                                     <Input
@@ -91,14 +145,17 @@ export default function EditPanel() {
                                     />
                                 </div>
                             </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label className="text-gray-900">Perfil Profissional</Label>
-                            <textarea
-                                className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
-                                value={dados.resumo || ''}
-                                onChange={(e) => updateDados({ resumo: e.target.value })}
-                            />
+
+                            <div className="space-y-2 pt-2">
+                                <Label className="text-gray-900">Perfil Profissional</Label>
+                                <textarea
+                                    className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                                    value={dados.resumo || ''}
+                                    onChange={(e) => updateDados({ resumo: e.target.value })}
+                                />
+                            </div>
+
+
                         </div>
 
 

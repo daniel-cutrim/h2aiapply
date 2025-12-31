@@ -28,7 +28,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                         <img
                             src={data.pessoal.foto_url}
                             alt="Foto"
-                            className="w-32 h-32 object-cover border border-gray-200 shadow-sm grayscale contrast-125"
+                            className={`w-32 h-32 object-cover border border-gray-200 shadow-sm ${customizacao.modelo_foto === 'circular' ? 'rounded-full' : 'rounded-lg'}`}
                         />
                     )}
                     <div>

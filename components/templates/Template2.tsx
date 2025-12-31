@@ -29,22 +29,20 @@ export default function Template2({ data, customizacao }: TemplateProps) {
             style={{ ...containerStyle, printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact' }}
         >
             {/* Heavy Header */}
-            <div
-                className="text-white p-8 flex items-center justify-between"
-                style={{ backgroundColor: 'var(--color-primary)' }}
-            >
-                <div>
-                    <h1 className="text-4xl font-bold uppercase tracking-wider mb-2">{data.pessoal.nome}</h1>
-                    <h2 className="text-2xl font-light">{data.pessoal.sobrenome}</h2>
-                    <p className="mt-4 max-w-md text-sm">{data.resumo}</p>
+            <div className="bg-[var(--color-primary)] rounded-xl p-8 mb-8 text-white shadow-lg relative overflow-hidden">
+                <div className="relative z-10 flex items-center gap-6">
+                    {data.pessoal.foto_url && (
+                        <img
+                            src={data.pessoal.foto_url}
+                            alt="Profile"
+                            className={`w-32 h-32 object-cover border-4 border-white/20 shadow-md ${customizacao.modelo_foto === 'circular' ? 'rounded-full' : 'rounded-lg'}`}
+                        />
+                    )}
+                    <div>
+                        <h1 className="text-5xl font-black tracking-tighter mb-2 uppercase">{data.pessoal.nome} {data.pessoal.sobrenome}</h1>
+                        <p className="text-xl opacity-90 font-medium tracking-widest">{data.pessoal.cargo}</p>
+                    </div>
                 </div>
-                {data.pessoal.foto_url && (
-                    <img
-                        src={data.pessoal.foto_url}
-                        alt="Foto"
-                        className="w-40 h-40 rounded-full border-4 border-white object-cover shadow-lg"
-                    />
-                )}
             </div>
 
             {/* Info Bar */}
