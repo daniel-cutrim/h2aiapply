@@ -12,7 +12,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
     const containerStyle = {
         '--color-primary': 'black', // Force minimalist black/gray mostly, or use custom but subtle
         '--color-secondary': '#666',
-        '--color-text': '#333',
+        '--color-text': '#000',
         fontFamily: fonte,
     } as React.CSSProperties;
 
@@ -60,7 +60,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                 <div className="flex-1 space-y-8">
                     <div>
                         <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Perfil</h3>
-                        <p className="text-justify text-gray-600">{data.resumo}</p>
+                        <p className="text-justify text-gray-900">{data.resumo}</p>
                     </div>
 
                     {customizacao.secoes_visiveis.experiencias && (
@@ -75,13 +75,13 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                                         </div>
                                         <div className="text-xs uppercase tracking-wide mb-2">{exp.empresa}</div>
                                         {exp.formato === 'topicos' ? (
-                                            <ul className="list-disc list-inside text-gray-600 pl-2">
+                                            <ul className="list-disc list-inside text-gray-900 pl-2">
                                                 {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
                                                     <li key={idx}>{line.trim()}</li>
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <p className="text-gray-600 whitespace-pre-line">{exp.descricao}</p>
+                                            <p className="text-gray-900 whitespace-pre-line">{exp.descricao}</p>
                                         )}
                                     </div>
                                 ))}
@@ -92,7 +92,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                     {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
                         <div>
                             <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Certificações</h3>
-                            <p className="text-gray-600 whitespace-pre-line text-sm">{data.certificacoes}</p>
+                            <p className="text-gray-900 whitespace-pre-line text-sm">{data.certificacoes}</p>
                         </div>
                     )}
 
@@ -104,7 +104,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                                     <div key={i}>
                                         <h4 className="font-bold">{edu.instituicao}</h4>
                                         <div>{edu.curso}</div>
-                                        <div className="text-xs text-gray-500">{edu.periodo}</div>
+                                        <div className="text-xs text-gray-600">{edu.periodo}</div>
                                     </div>
                                 ))}
                             </div>

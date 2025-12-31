@@ -35,8 +35,8 @@ export default function Template2({ data, customizacao }: TemplateProps) {
             >
                 <div>
                     <h1 className="text-4xl font-bold uppercase tracking-wider mb-2">{data.pessoal.nome}</h1>
-                    <h2 className="text-2xl font-light opacity-90">{data.pessoal.sobrenome}</h2>
-                    <p className="mt-4 max-w-md opacity-80 text-sm">{data.resumo}</p>
+                    <h2 className="text-2xl font-light">{data.pessoal.sobrenome}</h2>
+                    <p className="mt-4 max-w-md text-sm">{data.resumo}</p>
                 </div>
                 {data.pessoal.foto_url && (
                     <img
@@ -70,15 +70,15 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                     <div key={i} className="relative pl-4 border-l-2 border-gray-200">
                                         <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-secondary)' }}></div>
                                         <h4 className="font-bold text-lg">{exp.cargo}</h4>
-                                        <div className="text-sm font-semibold text-gray-500 mb-1">{exp.empresa} | {exp.periodo}</div>
+                                        <div className="text-sm font-semibold text-gray-700 mb-1">{exp.empresa} | {exp.periodo}</div>
                                         {exp.formato === 'topicos' ? (
-                                            <ul className="list-disc list-inside text-gray-600 pl-2">
+                                            <ul className="list-disc list-inside text-gray-800 pl-2">
                                                 {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
                                                     <li key={idx}>{line.trim()}</li>
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <p className="text-gray-600 mb-2 whitespace-pre-line">{exp.descricao}</p>
+                                            <p className="text-gray-800 mb-2 whitespace-pre-line">{exp.descricao}</p>
                                         )}
                                     </div>
                                 ))}
@@ -92,7 +92,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                 <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
                                 Certificações
                             </h3>
-                            <p className="whitespace-pre-line text-gray-600">{data.certificacoes}</p>
+                            <p className="whitespace-pre-line text-gray-800">{data.certificacoes}</p>
                         </div>
                     )}
 
@@ -106,8 +106,8 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                 {data.educacao.map((edu, i) => (
                                     <div key={i} className="flex flex-col">
                                         <h4 className="font-bold">{edu.curso}</h4>
-                                        <div className="text-gray-500">{edu.instituicao}</div>
-                                        <div className="text-xs text-gray-400">{edu.periodo}</div>
+                                        <div className="text-gray-700">{edu.instituicao}</div>
+                                        <div className="text-xs text-gray-600">{edu.periodo}</div>
                                     </div>
                                 ))}
                             </div>
@@ -122,7 +122,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                             <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Skills</h3>
                             <div className="flex flex-wrap gap-2">
                                 {data.skills.map((skill, i) => (
-                                    <span key={i} className="px-2 py-1 bg-white border border-gray-200 rounded text-xs font-semibold text-gray-600 shadow-sm">
+                                    <span key={i} className="px-2 py-1 bg-white border border-gray-200 rounded text-xs font-semibold text-gray-800 shadow-sm">
                                         {skill}
                                     </span>
                                 ))}

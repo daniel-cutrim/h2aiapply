@@ -73,7 +73,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                         <h2 className="text-lg font-bold">Contato</h2>
                     </div>
 
-                    <div className="flex flex-col gap-3 text-sm opacity-90">
+                    <div className="flex flex-col gap-3 text-sm">
                         <div className="flex items-center gap-2">
                             <Mail className="w-4 h-4" /> <span>{data.pessoal.email}</span>
                         </div>
@@ -110,7 +110,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                                 {data.idiomas.map((lang, i) => (
                                     <div key={i} className="flex justify-between">
                                         <span>{lang.idioma}</span>
-                                        <span className="opacity-75">{lang.nivel}</span>
+                                        <span className="opacity-90">{lang.nivel}</span>
                                     </div>
                                 ))}
                             </div>
@@ -129,7 +129,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                     {customizacao.secoes_visiveis.perfil && (
                         <div className={`mb-6 ${spacingClass}`}>
                             <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-2" style={{ borderColor: 'var(--color-secondary)' }}>Resumo</h3>
-                            <p className="text-justify leading-relaxed opacity-80">{data.resumo}</p>
+                            <p className="text-justify leading-relaxed">{data.resumo}</p>
                         </div>
                     )}
 
@@ -146,13 +146,13 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                                         <div className="text-sm font-semibold mb-1" style={{ color: 'var(--color-secondary)' }}>{exp.empresa}</div>
 
                                         {exp.formato === 'topicos' ? (
-                                            <ul className="list-disc list-inside text-sm opacity-80 pl-2">
+                                            <ul className="list-disc list-inside text-sm pl-2">
                                                 {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
                                                     <li key={idx}>{line.trim()}</li>
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <p className="text-sm mb-2 opacity-80 whitespace-pre-line">{exp.descricao}</p>
+                                            <p className="text-sm mb-2 whitespace-pre-line">{exp.descricao}</p>
                                         )}
                                     </div>
                                 ))}
@@ -163,7 +163,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                     {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
                         <div className={`mb-6`}>
                             <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Certificações</h3>
-                            <p className="text-sm opacity-80 whitespace-pre-line">{data.certificacoes}</p>
+                            <p className="text-sm whitespace-pre-line">{data.certificacoes}</p>
                         </div>
                     )}
 

@@ -25,19 +25,19 @@ export default function EditPanel() {
                 <div className="flex gap-2 border-b mb-6 pb-2">
                     <button
                         onClick={() => setActiveTab('conteudo')}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'conteudo' ? 'bg-slate-900 text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'conteudo' ? 'bg-slate-900 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
                     >
                         Conteúdo
                     </button>
                     <button
                         onClick={() => setActiveTab('design')}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'design' ? 'bg-slate-900 text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'design' ? 'bg-slate-900 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
                     >
                         Design
                     </button>
                     <button
                         onClick={() => setActiveTab('templates')}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'templates' ? 'bg-slate-900 text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'templates' ? 'bg-slate-900 text-white' : 'text-gray-700 hover:bg-gray-100'}`}
                     >
                         Templates
                     </button>
@@ -105,7 +105,7 @@ export default function EditPanel() {
                         {/* Skills - Habilidades */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="font-bold text-gray-900">Habilidades</h3>
-                            <p className="text-xs text-gray-500">Liste suas habilidades (uma por linha)</p>
+                            <p className="text-xs text-gray-700">Liste suas habilidades (uma por linha)</p>
                             <textarea
                                 className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
                                 value={dados.skills.join('\n')}
@@ -118,7 +118,7 @@ export default function EditPanel() {
                         {/* Certificações */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="font-bold text-gray-900">Certificações</h3>
-                            <p className="text-xs text-gray-500">Liste suas certificações em texto livre.</p>
+                            <p className="text-xs text-gray-700">Liste suas certificações em texto livre.</p>
                             <textarea
                                 className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
                                 value={typeof dados.certificacoes === 'string' ? dados.certificacoes : ''}
@@ -262,7 +262,7 @@ export default function EditPanel() {
                                             <Label className="text-xs text-gray-900">Descrição / Atividades</Label>
                                             <div className="flex bg-slate-200 rounded p-0.5">
                                                 <button
-                                                    className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'texto' ? 'bg-white shadow' : 'text-slate-500'}`}
+                                                    className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'texto' ? 'bg-white shadow text-black' : 'text-gray-700'}`}
                                                     onClick={() => {
                                                         const newExp = [...dados.experiencias];
                                                         newExp[index] = { ...exp, formato: 'texto', descricao: exp.descricao.replace(/• /g, '').replace(/\n/g, ' ') };
@@ -272,7 +272,7 @@ export default function EditPanel() {
                                                     H2B (Texto)
                                                 </button>
                                                 <button
-                                                    className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'topicos' ? 'bg-white shadow' : 'text-slate-500'}`}
+                                                    className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'topicos' ? 'bg-white shadow text-black' : 'text-gray-700'}`}
                                                     onClick={() => {
                                                         const newExp = [...dados.experiencias];
                                                         let newDesc = exp.descricao;
@@ -332,7 +332,7 @@ export default function EditPanel() {
                         {/* Certificações */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="font-bold text-gray-900">Certificações</h3>
-                            <p className="text-xs text-gray-500">Liste suas certificações em texto livre.</p>
+                            <p className="text-xs text-gray-700">Liste suas certificações em texto livre.</p>
                             <textarea
                                 className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900"
                                 value={typeof dados.certificacoes === 'string' ? dados.certificacoes : ''}
@@ -394,22 +394,22 @@ export default function EditPanel() {
                             onClick={() => setTemplate('template_1')}
                             className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_1' ? 'ring-2 ring-blue-600 border-transparent' : 'hover:border-blue-400'}`}
                         >
-                            <div className="font-bold">Profissional Moderno</div>
-                            <div className="text-sm text-gray-500">Sidebar azul e layout de 2 colunas.</div>
+                            <div className="font-bold text-gray-900">Profissional Moderno</div>
+                            <div className="text-sm text-gray-700">Sidebar azul e layout de 2 colunas.</div>
                         </button>
                         <button
                             onClick={() => setTemplate('template_2')}
                             className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_2' ? 'ring-2 ring-blue-600 border-transparent' : 'hover:border-blue-400'}`}
                         >
-                            <div className="font-bold">Criativo Bold</div>
-                            <div className="text-sm text-gray-500">Header largo e cores vibrantes.</div>
+                            <div className="font-bold text-gray-900">Criativo Bold</div>
+                            <div className="text-sm text-gray-700">Header largo e cores vibrantes.</div>
                         </button>
                         <button
                             onClick={() => setTemplate('template_3')}
                             className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_3' ? 'ring-2 ring-blue-600 border-transparent' : 'hover:border-blue-400'}`}
                         >
-                            <div className="font-bold">Minimalista Clean</div>
-                            <div className="text-sm text-gray-500">Preto e branco, foco no conteúdo.</div>
+                            <div className="font-bold text-gray-900">Minimalista Clean</div>
+                            <div className="text-sm text-gray-700">Preto e branco, foco no conteúdo.</div>
                         </button>
                     </div>
                 )}
@@ -463,7 +463,7 @@ export default function EditPanel() {
                                     <button
                                         key={s}
                                         onClick={() => updateCustomizacao({ espacamento: s as any })}
-                                        className={`flex-1 py-1.5 text-xs font-medium rounded uppercase ${customizacao.espacamento === s ? 'bg-white shadow text-black' : 'text-gray-500'}`}
+                                        className={`flex-1 py-1.5 text-xs font-medium rounded uppercase ${customizacao.espacamento === s ? 'bg-white shadow text-black' : 'text-gray-700'}`}
                                     >
                                         {s}
                                     </button>

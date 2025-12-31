@@ -27,7 +27,22 @@ export default function PreviewPanel() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    html: htmlContent,
+                    html: `
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <script src="https://cdn.tailwindcss.com"></script>
+                            <style>
+                                @page { size: A4; margin: 0; }
+                                body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                            </style>
+                        </head>
+                        <body>
+                            ${element.outerHTML}
+                        </body>
+                        </html>
+                    `,
                     token: curriculo.token
                 })
             });
