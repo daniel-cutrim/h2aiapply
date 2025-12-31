@@ -1,0 +1,65 @@
+{
+    "template_id": "template_1",
+    "customizacao": {
+        "modelo_foto": "circular",
+        "cores": {
+            "primaria": "#1e3a8a",
+            "secundaria": "#64748b",
+            "texto": "#0f172a"
+        },
+        "fonte": "sans-serif",
+        "espacamento": "normal"
+    },
+    "dados": {
+        "pessoal": {
+            "nome": "João",
+            "sobrenome": "Silva",
+            "cargo": "Desenvolvedor Full Stack",
+            "email": "joao.silva@email.com",
+            "telefone": "(11) 99999-9999",
+            "localizacao": "São Paulo, SP",
+            "linkedin": "linkedin.com/in/joaosilva",
+            "foto_url": "https://github.com/shadcn.png"
+        },
+        "resumo": "Desenvolvedor apaixonado por criar soluções escaláveis e eficientes. Com 5 anos de experiência em React e Node.js, busco novos desafios para impactar positivamente usuários.",
+        "skills": [
+            "JavaScript (ES6+)",
+            "TypeScript",
+            "React.js / Next.js",
+            "Node.js",
+            "PostgreSQL",
+            "Docker",
+            "Git / GitHub"
+        ],
+        "idiomas": [
+            {
+                "idioma": "Português",
+                "nivel": "Native"
+            },
+            {
+                "idioma": "Inglês",
+                "nivel": "Advanced"
+            }
+        ],
+        "educacao": "Bacharelado em Ciência da Computação\nUniversidade Federal - 2018 a 2022",
+        "certificacoes": "AWS Certified Solutions Architect - Associate (2023)\nMeta Frontend Developer Professional Certificate (2022)",
+        "experiencias": [
+            {
+                "id": "1",
+                "empresa": "Tech Solutions",
+                "cargo": "Senior Frontend Engineer",
+                "periodo": "2022 - Atual",
+                "formato": "topicos",
+                "descricao": "• Liderança técnica de equipe com 5 desenvolvedores.\n• Implementação de Design System reduzindo tempo de desenvolvimento em 30%.\n• Migração de legado para Next.js."
+            },
+            {
+                "id": "2",
+                "empresa": "Startup Inovadora",
+                "cargo": "Full Stack Developer",
+                "periodo": "2020 - 2022",
+                "formato": "texto",
+                "descricao": "Desenvolvimento de funcionalidades de ponta a ponta, desde a modelagem de banco de dados até a interface do usuário. Responsável pela integração com APIs de pagamentos."
+            }
+        ]
+    }
+}
