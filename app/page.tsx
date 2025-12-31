@@ -26,17 +26,23 @@ export default function Home() {
           dados: {
             pessoal: {
               nome: "Seu Nome",
+              sobrenome: "Sobrenome",
               email: "email@exemplo.com",
               telefone: "(11) 99999-9999",
               cargo: "Desenvolvedor de Software",
-              endereco: "São Paulo, SP"
+              endereco: "Rua Exemplo, 123",
+              localizacao: "São Paulo, SP"
             },
             resumo: "Resumo profissional...",
             experiencias: [],
             educacao: [],
-            skills: [],
-            idiomas: [],
-            certificacoes: []
+            skills: ["Skill 1", "Skill 2"],
+            idiomas: [
+              { idioma: "Portuguese", nivel: "" },
+              { idioma: "English", nivel: "" },
+              { idioma: "Spanish", nivel: "" }
+            ],
+            certificacoes: "Certificação Exemplo\nInstituição\n2025"
           }
         }),
       });

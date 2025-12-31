@@ -1,46 +1,50 @@
+// Basic types
+export interface Pessoal {
+    nome: string;
+    sobrenome: string;
+    email: string;
+    telefone: string;
+    cargo: string;
+    endereco: string;
+    localizacao?: string;
+    linkedin?: string;
+    foto_url?: string;
+    site?: string;
+    foto?: string;
+}
+
+export interface Experiencia {
+    id: string; // Helper for React keys
+    empresa: string;
+    cargo: string;
+    periodo: string;
+    descricao: string; // HTML/Text content
+    formato: 'texto' | 'topicos'; // Switch for UI
+}
+
+export interface Educacao {
+    id: string;
+    instituicao: string;
+    curso: string;
+    periodo: string;
+    descricao: string;
+}
+
+export type NivelIdioma = 'Studying' | 'Basic' | 'Intermediate' | 'Advanced' | 'Native';
+
+export interface Idioma {
+    idioma: string; // Portuguese, English, Spanish
+    nivel: NivelIdioma | ''; // Allow empty for unselected
+}
+
 export interface CurriculoData {
-    pessoal: {
-        nome: string;
-        sobrenome: string;
-        email: string;
-        telefone: string;
-        localizacao: string;
-        foto_url?: string;
-        linkedin?: string;
-    };
-
-    perfil: string;
-
-    experiencias: Array<{
-        id?: string; // Helpful for UI keys
-        empresa: string;
-        cargo: string;
-        periodo: string;
-        descricao: string;
-        bullets: string[];
-    }>;
-
-    educacao: Array<{
-        id?: string;
-        instituicao: string;
-        curso: string;
-        periodo: string;
-    }>;
-
-    skills: string[];
-
-    idiomas: Array<{
-        id?: string;
-        idioma: string;
-        nivel: string; // Nativo, Avançado, Intermediário, Básico
-    }>;
-
-    certificacoes?: Array<{
-        id?: string;
-        nome: string;
-        instituicao: string;
-        ano: string;
-    }>;
+    pessoal: Pessoal;
+    resumo: string;
+    experiencias: Experiencia[];
+    educacao: Educacao[];
+    skills: string[]; // List of strings
+    idiomas: Idioma[]; // Fixed list
+    certificacoes: string; // Free text area
 }
 
 export interface Customizacao {

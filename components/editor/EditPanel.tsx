@@ -81,15 +81,257 @@ export default function EditPanel() {
                                 <Label>Perfil Profissional</Label>
                                 <textarea
                                     className="flex min-h-[80px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
-                                    value={dados.perfil || ''}
-                                    onChange={(e) => updateDados({ perfil: e.target.value })}
+                                    value={dados.resumo || ''}
+                                    onChange={(e) => updateDados({ resumo: e.target.value })}
                                 />
                             </div>
                         </div>
 
                         {/* Add more sections for Experience, Education etc. here */}
-                        <div className="p-4 bg-yellow-50 rounded border border-yellow-200 text-sm text-yellow-800">
-                            Outras seções (Experiência, Educação) seriam implementadas aqui com lógica de array fields.
+                        {/* Certificações */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-bold text-gray-900">Certificações</h3>
+                            <p className="text-xs text-gray-500">Liste suas certificações em texto livre.</p>
+                            <textarea
+                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                                value={typeof dados.certificacoes === 'string' ? dados.certificacoes : ''}
+                                onChange={(e) => updateDados({ certificacoes: e.target.value })}
+                                placeholder="Bachelor's Degree&#10;Unifael&#10;Completed in 2025"
+                            />
+                        </div>
+
+                        {/* Idiomas */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-bold text-gray-900">Idiomas</h3>
+                            <div className="grid gap-4">
+                                {(dados.idiomas || []).map((lang, index) => (
+                                    <div key={lang.idioma} className="flex items-center justify-between border p-3 rounded-lg bg-gray-50">
+                                        <span className="font-medium">{lang.idioma}</span>
+                                        <div className="w-[180px]">
+                                            <select
+                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950"
+                                                value={lang.nivel}
+                                                onChange={(e) => {
+                                                    const newIdiomas = [...(dados.idiomas || [])];
+                                                    // Ensure array is initialized if index is out of bounds (which shouldn't happen with fixed list but safe to check)
+                                                    if (!newIdiomas[index]) return;
+
+                                                    newIdiomas[index] = { ...newIdiomas[index], nivel: e.target.value as any };
+                                                    updateDados({ idiomas: newIdiomas });
+                                                }}
+                                            >
+                                                <option value="">Selecione...</option>
+                                                <option value="Studying">Studying</option>
+                                                <option value="Basic">Basic</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Advanced">Advanced</option>
+                                                <option value="Native">Native</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                ))}
+                                {/* Fallback initialization button if old resume */}
+                                {(!dados.idiomas || dados.idiomas.length === 0) && (
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => updateDados({
+                                            idiomas: [
+                                                { idioma: 'Portuguese', nivel: '' },
+                                                { idioma: 'English', nivel: '' },
+                                                { idioma: 'Spanish', nivel: '' }
+                                            ]
+                                        })}
+                                    >
+                                        Inicializar Idiomas
+                                    </Button>
+                                )}
+                            </div>
+                        </div>
+
+                        {/* Experiências */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-bold text-gray-900">Experiências</h3>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => {
+                                        const newExp = [
+                                            ...(dados.experiencias || []),
+                                            {
+                                                id: crypto.randomUUID(),
+                                                empresa: 'Nova Empresa',
+                                                cargo: 'Cargo',
+                                                periodo: '2023 - Atual',
+                                                descricao: 'Descrição das atividades...',
+                                                formato: 'texto' as const
+                                            }
+                                        ];
+                                        updateDados({ experiencias: newExp });
+                                    }}
+                                >
+                                    + Adicionar
+                                </Button>
+                            </div>
+
+                            {(dados.experiencias || []).map((exp, index) => (
+                                <div key={exp.id || index} className="space-y-3 p-4 border rounded-lg bg-gray-50 relative group">
+                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-red-500 hover:text-red-700 h-6 px-2"
+                                            onClick={() => {
+                                                const newExp = [...dados.experiencias];
+                                                newExp.splice(index, 1);
+                                                updateDados({ experiencias: newExp });
+                                            }}
+                                        >
+                                            Excluir
+                                        </Button>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <Label className="text-xs">Cargo</Label>
+                                            <Input
+                                                value={exp.cargo}
+                                                onChange={(e) => {
+                                                    const newExp = [...dados.experiencias];
+                                                    newExp[index] = { ...exp, cargo: e.target.value };
+                                                    updateDados({ experiencias: newExp });
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <Label className="text-xs">Empresa</Label>
+                                            <Input
+                                                value={exp.empresa}
+                                                onChange={(e) => {
+                                                    const newExp = [...dados.experiencias];
+                                                    newExp[index] = { ...exp, empresa: e.target.value };
+                                                    updateDados({ experiencias: newExp });
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <Label className="text-xs">Período</Label>
+                                        <Input
+                                            value={exp.periodo}
+                                            onChange={(e) => {
+                                                const newExp = [...dados.experiencias];
+                                                newExp[index] = { ...exp, periodo: e.target.value };
+                                                updateDados({ experiencias: newExp });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between items-end">
+                                            <Label className="text-xs">Descrição / Atividades</Label>
+                                            <div className="flex bg-slate-200 rounded p-0.5">
+                                                <button
+                                                    className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'texto' ? 'bg-white shadow' : 'text-slate-500'}`}
+                                                    onClick={() => {
+                                                        const newExp = [...dados.experiencias];
+                                                        newExp[index] = { ...exp, formato: 'texto', descricao: exp.descricao.replace(/• /g, '').replace(/\n/g, ' ') };
+                                                        updateDados({ experiencias: newExp });
+                                                    }}
+                                                >
+                                                    H2B (Texto)
+                                                </button>
+                                                <button
+                                                    className={`px-2 py-0.5 text-[10px] rounded ${exp.formato === 'topicos' ? 'bg-white shadow' : 'text-slate-500'}`}
+                                                    onClick={() => {
+                                                        const newExp = [...dados.experiencias];
+                                                        // Stupid simple heuristic: split by periods if long text, or just wrap in bullet
+                                                        let newDesc = exp.descricao;
+                                                        if (exp.formato === 'texto') {
+                                                            // If looks like sentences, split them
+                                                            if (newDesc.includes('.')) {
+                                                                newDesc = newDesc.split('.').map(s => s.trim()).filter(Boolean).map(s => `• ${s}`).join('\n');
+                                                            } else {
+                                                                newDesc = `• ${newDesc}`;
+                                                            }
+                                                        }
+                                                        newExp[index] = { ...exp, formato: 'topicos', descricao: newDesc };
+                                                        updateDados({ experiencias: newExp });
+                                                    }}
+                                                >
+                                                    H2A (Tópicos)
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <textarea
+                                            className="min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+                                            value={exp.descricao}
+                                            onChange={(e) => {
+                                                const newExp = [...dados.experiencias];
+                                                newExp[index] = { ...exp, descricao: e.target.value };
+                                                updateDados({ experiencias: newExp });
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Certificações */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-bold text-gray-900">Certificações</h3>
+                            <p className="text-xs text-gray-500">Liste suas certificações em texto livre.</p>
+                            <textarea
+                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm"
+                                value={typeof dados.certificacoes === 'string' ? dados.certificacoes : ''}
+                                onChange={(e) => updateDados({ certificacoes: e.target.value })}
+                                placeholder="Bachelor's Degree&#10;Unifael&#10;Completed in 2025"
+                            />
+                        </div>
+
+                        {/* Idiomas */}
+                        <div className="space-y-4 pt-4 border-t">
+                            <h3 className="font-bold text-gray-900">Idiomas</h3>
+                            <div className="grid gap-4">
+                                {(dados.idiomas || []).map((lang, index) => (
+                                    <div key={lang.idioma} className="flex items-center justify-between border p-3 rounded-lg bg-gray-50">
+                                        <span className="font-medium">{lang.idioma}</span>
+                                        <div className="w-[180px]">
+                                            <select
+                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm"
+                                                value={lang.nivel}
+                                                onChange={(e) => {
+                                                    const newIdiomas = [...(dados.idiomas || [])];
+                                                    if (!newIdiomas[index]) return;
+                                                    newIdiomas[index] = { ...newIdiomas[index], nivel: e.target.value as any };
+                                                    updateDados({ idiomas: newIdiomas });
+                                                }}
+                                            >
+                                                <option value="">Selecione...</option>
+                                                <option value="Studying">Studying</option>
+                                                <option value="Basic">Basic</option>
+                                                <option value="Intermediate">Intermediate</option>
+                                                <option value="Advanced">Advanced</option>
+                                                <option value="Native">Native</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                ))}
+                                {(!dados.idiomas || dados.idiomas.length === 0) && (
+                                    <Button
+                                        variant="outline"
+                                        onClick={() => updateDados({
+                                            idiomas: [
+                                                { idioma: 'Portuguese', nivel: '' },
+                                                { idioma: 'English', nivel: '' },
+                                                { idioma: 'Spanish', nivel: '' }
+                                            ]
+                                        })}
+                                    >
+                                        Inicializar Idiomas
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 )}

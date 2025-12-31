@@ -17,22 +17,35 @@ export default function PreviewPanel() {
         setIsExporting(true);
         try {
             const element = document.getElementById('resume-content');
-            if (!element) {
-                console.error("Elemento resume-content não encontrado");
-                return;
-            }
+            if (!element) return;
 
-            // Generate PNG client-side
-            const dataUrl = await htmlToImage.toPng(element, { quality: 1.0, pixelRatio: 2 });
+            const htmlContent = element.outerHTML;
 
-            const link = document.createElement('a');
-            link.download = `curriculo-${curriculo.dados.pessoal.nome || 'download'}.png`;
-            link.href = dataUrl;
-            link.click();
+            const res = await fetch(`/api/curriculo/${curriculo.id}/export`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    html: htmlContent,
+                    token: curriculo.token
+                })
+            });
+
+            if (!res.ok) throw new Error('Falha na exportação');
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `curriculo-${curriculo.dados.pessoal.nome || 'curriculo'}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
 
         } catch (error) {
-            console.error('Erro ao gerar imagem:', error);
-            alert('Erro ao exportar Imagem. Tente novamente.');
+            console.error(error);
+            alert('Erro ao exportar PDF');
         } finally {
             setIsExporting(false);
         }
@@ -43,7 +56,7 @@ export default function PreviewPanel() {
             <div className="w-full flex justify-end gap-2 px-4 max-w-[210mm]">
                 <Button onClick={handleExport} disabled={isExporting}>
                     {isExporting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Download className="w-4 h-4 mr-2" />}
-                    Baixar Imagem (PNG)
+                    Exportar PDF
                 </Button>
             </div>
 

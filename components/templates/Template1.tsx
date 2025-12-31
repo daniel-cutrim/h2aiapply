@@ -108,8 +108,8 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                 {customizacao.secoes_visiveis.perfil && (
                     <div className={`mb-6 ${spacingClass}`}>
-                        <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-2" style={{ borderColor: 'var(--color-secondary)' }}>Perfil</h3>
-                        <p className="text-justify leading-relaxed opacity-80">{data.perfil}</p>
+                        <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-2" style={{ borderColor: 'var(--color-secondary)' }}>Resumo</h3>
+                        <p className="text-justify leading-relaxed opacity-80">{data.resumo}</p>
                     </div>
                 )}
 
@@ -124,15 +124,26 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                                         <span className="text-xs font-semibold px-2 py-1 bg-gray-100 rounded">{exp.periodo}</span>
                                     </div>
                                     <div className="text-sm font-semibold mb-1" style={{ color: 'var(--color-secondary)' }}>{exp.empresa}</div>
-                                    <p className="text-sm mb-2 opacity-80">{exp.descricao}</p>
-                                    {exp.bullets && exp.bullets.length > 0 && (
+
+                                    {exp.formato === 'topicos' ? (
                                         <ul className="list-disc list-inside text-sm opacity-80 pl-2">
-                                            {exp.bullets.map((b, bi) => <li key={bi}>{b}</li>)}
+                                            {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
+                                                <li key={idx}>{line.trim()}</li>
+                                            ))}
                                         </ul>
+                                    ) : (
+                                        <p className="text-sm mb-2 opacity-80 whitespace-pre-line">{exp.descricao}</p>
                                     )}
                                 </div>
                             ))}
                         </div>
+                    </div>
+                )}
+
+                {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
+                    <div className={`mb-6`}>
+                        <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Certificações</h3>
+                        <p className="text-sm opacity-80 whitespace-pre-line">{data.certificacoes}</p>
                     </div>
                 )}
 

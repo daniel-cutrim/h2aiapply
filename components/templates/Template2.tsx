@@ -36,7 +36,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                 <div>
                     <h1 className="text-4xl font-bold uppercase tracking-wider mb-2">{data.pessoal.nome}</h1>
                     <h2 className="text-2xl font-light opacity-90">{data.pessoal.sobrenome}</h2>
-                    <p className="mt-4 max-w-md opacity-80 text-sm">{data.perfil}</p>
+                    <p className="mt-4 max-w-md opacity-80 text-sm">{data.resumo}</p>
                 </div>
                 {data.pessoal.foto_url && (
                     <img
@@ -71,10 +71,28 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                         <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-secondary)' }}></div>
                                         <h4 className="font-bold text-lg">{exp.cargo}</h4>
                                         <div className="text-sm font-semibold text-gray-500 mb-1">{exp.empresa} | {exp.periodo}</div>
-                                        <p className="text-gray-600 mb-2">{exp.descricao}</p>
+                                        {exp.formato === 'topicos' ? (
+                                            <ul className="list-disc list-inside text-gray-600 pl-2">
+                                                {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
+                                                    <li key={idx}>{line.trim()}</li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <p className="text-gray-600 mb-2 whitespace-pre-line">{exp.descricao}</p>
+                                        )}
                                     </div>
                                 ))}
                             </div>
+                        </div>
+                    )}
+
+                    {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
+                        <div>
+                            <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
+                                <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
+                                Certificações
+                            </h3>
+                            <p className="whitespace-pre-line text-gray-600">{data.certificacoes}</p>
                         </div>
                     )}
 

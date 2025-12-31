@@ -60,7 +60,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                 <div className="flex-1 space-y-8">
                     <div>
                         <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Perfil</h3>
-                        <p className="text-justify text-gray-600">{data.perfil}</p>
+                        <p className="text-justify text-gray-600">{data.resumo}</p>
                     </div>
 
                     {customizacao.secoes_visiveis.experiencias && (
@@ -74,10 +74,25 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                                             <span className="text-xs italic">{exp.periodo}</span>
                                         </div>
                                         <div className="text-xs uppercase tracking-wide mb-2">{exp.empresa}</div>
-                                        <p className="text-gray-600">{exp.descricao}</p>
+                                        {exp.formato === 'topicos' ? (
+                                            <ul className="list-disc list-inside text-gray-600 pl-2">
+                                                {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
+                                                    <li key={idx}>{line.trim()}</li>
+                                                ))}
+                                            </ul>
+                                        ) : (
+                                            <p className="text-gray-600 whitespace-pre-line">{exp.descricao}</p>
+                                        )}
                                     </div>
                                 ))}
                             </div>
+                        </div>
+                    )}
+
+                    {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
+                        <div>
+                            <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Certificações</h3>
+                            <p className="text-gray-600 whitespace-pre-line text-sm">{data.certificacoes}</p>
                         </div>
                     )}
 

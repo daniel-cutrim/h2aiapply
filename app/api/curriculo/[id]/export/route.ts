@@ -14,26 +14,45 @@ export async function POST(
         }
 
         const puppeteerUrl = process.env.PUPPETEER_API_URL;
-        // Note: User specified no API Key needed for this internal service.
+        // Note: Use /pdf-from-html endpoint logic
 
         if (!puppeteerUrl) {
             return NextResponse.json({ error: 'Puppeteer service not configured' }, { status: 503 });
         }
 
-        // Call user's custom Image Generation Endpoint
-        const response = await fetch(puppeteerUrl, {
+        // Replace the endpoint path if the env var is base URL, otherwise assume user provided full URL
+        // For safety, let's append /pdf-from-html if the user provided just the base, 
+        // OR if the user provided the full URL to the previous image endpoint, we might need to adjust.
+        // However, usually PUPPETEER_API_URL is the full endpoint. 
+        // Let's assume the user will update the ENV or we construct it.
+        // User snippet show: app.post('/pdf-from-html', ...). 
+        // I'll assume PUPPETEER_API_URL in .env should be updated or I should try to detect.
+        // Best practice: Use the URL as is from ENV, but if it ends in /image-from-html, switch it.
+
+        let targetUrl = puppeteerUrl;
+        if (targetUrl.includes('/image-from-html')) {
+            targetUrl = targetUrl.replace('/image-from-html', '/pdf-from-html');
+        } else if (!targetUrl.endsWith('/pdf-from-html')) {
+            // If it looks like a base URL (no specific route), append
+            targetUrl = targetUrl.replace(/\/$/, '') + '/pdf-from-html';
+        }
+
+        // Call user's PDF Generation Endpoint
+        const response = await fetch(targetUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 html,
-                // settings for A4 quality
-                width: 794, // approx 210mm at 96dpi HQ
-                height: 1123, // approx 297mm at 96dpi HQ
-                deviceScaleFactor: 3, // High quality requested by user
-                type: 'png',
-                waitFor: 100 // small buffer for render
+                format: 'A4',
+                margin: {
+                    top: '20px',
+                    right: '20px',
+                    bottom: '20px',
+                    left: '20px'
+                },
+                waitFor: 100
             })
         });
 
@@ -42,28 +61,20 @@ export async function POST(
             throw new Error(`Puppeteer service error: ${response.status} - ${errText}`);
         }
 
-        // Expecting JSON with base64 or raw image. 
         const data = await response.json();
-        let base64String = data.image || data.base64 || data.content || (typeof data === 'string' ? data : null);
+        const base64Pdf = data.pdf || data.file || (typeof data === 'string' ? data : null);
 
-        if (!base64String && data.data) {
-            base64String = data.data;
+        if (!base64Pdf) {
+            throw new Error('PDF output not found in response');
         }
 
-        if (!base64String) {
-            console.warn('Unknown response format from Puppeteer:', data);
-            throw new Error('Formato de resposta do Puppeteer desconhecido');
-        }
+        const buffer = Buffer.from(base64Pdf, 'base64');
 
-        // Strip prefix if present (e.g. "data:image/png;base64,")
-        const base64Data = base64String.replace(/^data:image\/\w+;base64,/, "");
-        const buffer = Buffer.from(base64Data, 'base64');
-
-        // Return PNG
+        // Return PDF
         return new NextResponse(buffer, {
             headers: {
-                'Content-Type': 'image/png',
-                'Content-Disposition': `attachment; filename="curriculo-${params.id}.png"`
+                'Content-Type': 'application/pdf',
+                'Content-Disposition': `attachment; filename="curriculo-${params.id}.pdf"`
             }
         });
 
