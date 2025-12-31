@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { generateResumeHtml } from '@/lib/generateHtml';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -13,6 +12,8 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Dados inválidos ou incompletos.' }, { status: 400 });
         }
 
+        // Dynamic import to bypass Turbopack static analysis
+        const { generateResumeHtml } = await import('@/lib/generateHtml');
         const fullHtml = generateResumeHtml(dados, template_id || 'template_1', customizacao || {});
 
         // Send to Puppeteer URL
