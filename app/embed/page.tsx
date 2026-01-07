@@ -14,9 +14,19 @@ export default function EmbedPage() {
     if (searchParams) {
         const token = searchParams.get('token');
         const id = searchParams.get('id');
+        const visual = searchParams.get('visual');
+        const lang = searchParams.get('lang');
+
         if (token && id) {
+            // Build query string dynamically
+            const params = new URLSearchParams();
+            params.set('token', token);
+            params.set('id', id);
+            if (visual) params.set('visual', visual);
+            if (lang) params.set('lang', lang);
+
             // Use replace to avoid history stack buildup in iframe
-            router.replace(`/curriculo?token=${token}&id=${id}`);
+            router.replace(`/curriculo?${params.toString()}`);
             return (
                 <div className="flex items-center justify-center min-h-screen bg-transparent">
                     <Loader2 className="w-8 h-8 animate-spin text-blue-600" />

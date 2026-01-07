@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Embed Customization Test</title>
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .frame-container {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        iframe {
+            width: 100%;
+            height: 600px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Custom Embed Parameters Test</h1>
+    <div class="grid">
+        <div class="frame-container">
+            <h2>1. Default (Light / PT)</h2>
+            <iframe
+                src="http://localhost:3000/embed?token=594b3abb-1438-439b-8255-11daee9f0399&id=b20af06b-61e2-4c61-b34f-7d12b77c5fb0"></iframe>
+        </div>
+        <div class="frame-container">
+            <h2>2. Custom (Dark / ES)</h2>
+            <iframe
+                src="http://localhost:3000/embed?token=594b3abb-1438-439b-8255-11daee9f0399&id=b20af06b-61e2-4c61-b34f-7d12b77c5fb0&visual=dark&lang=es"></iframe>
+        </div>
+    </div>
+</body>
+
+</html>
