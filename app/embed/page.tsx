@@ -7,7 +7,23 @@ import { useRouter } from 'next/navigation';
 
 export default function EmbedPage() {
     const router = useRouter();
+    const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
     const [isLoading, setIsLoading] = useState(false);
+
+    // Auto-redirect if token and id are present in query params
+    if (searchParams) {
+        const token = searchParams.get('token');
+        const id = searchParams.get('id');
+        if (token && id) {
+            // Use replace to avoid history stack buildup in iframe
+            router.replace(`/curriculo?token=${token}&id=${id}`);
+            return (
+                <div className="flex items-center justify-center min-h-screen bg-transparent">
+                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                </div>
+            );
+        }
+    }
 
     const handleCreateResume = async () => {
         setIsLoading(true);
