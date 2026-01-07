@@ -31,7 +31,7 @@ export async function POST(req: Request) {
         // In production, use an ENV var for base URL.
         // Construct the URL
         const protocol = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-        const host = process.env.NEXT_PUBLIC_APP_URL || process.env.VERCEL_URL || 'localhost:3000';
+        const host = process.env.NEXT_PUBLIC_APP_URL || (process.env.NODE_ENV === 'development' ? 'localhost:3000' : 'h2aiapply.vercel.app');
         const baseUrl = `${protocol}://${host}`;
         const url = `${baseUrl}/curriculo?token=${token}&id=${data.id}`;
 
