@@ -12,9 +12,10 @@ interface CurriculoEditorProps {
     token: string;
     visual?: 'light' | 'dark';
     lang?: 'pt' | 'es';
+    jobId?: string;
 }
 
-export default function CurriculoEditor({ id, token, visual, lang }: CurriculoEditorProps) {
+export default function CurriculoEditor({ id, token, visual, lang, jobId }: CurriculoEditorProps) {
     const { fetchCurriculo, isLoading, error, curriculo } = useCurriculoStore();
     const { setTheme, setLanguage } = useUiStore();
 
@@ -31,7 +32,7 @@ export default function CurriculoEditor({ id, token, visual, lang }: CurriculoEd
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-screen bg-gray-50 dark:bg-slate-900">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                <Loader2 className="w-8 h-8 animate-spin text-[#fe4a21]" />
                 <span className="ml-2 text-gray-600 dark:text-gray-300">Carregando currículo...</span>
             </div>
         );
@@ -58,7 +59,7 @@ export default function CurriculoEditor({ id, token, visual, lang }: CurriculoEd
 
                 {/* Right Panel: Live Preview */}
                 <div className="w-full lg:w-2/3 bg-gray-100 dark:bg-slate-950 p-4 lg:p-8 overflow-auto flex justify-center items-start">
-                    <PreviewPanel />
+                    <PreviewPanel jobId={jobId} />
                 </div>
             </div>
         </div>

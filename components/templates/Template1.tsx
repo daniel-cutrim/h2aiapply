@@ -18,16 +18,23 @@ export default function Template1({ data, customizacao }: TemplateProps) {
         fontFamily: fonte,
     } as React.CSSProperties;
 
-    const spacingClass = {
+    // Define consistent spacing classes
+    const gapClass = {
         'compacto': 'gap-2',
         'normal': 'gap-4',
         'amplo': 'gap-6'
     }[espacamento];
 
-    const pyClass = {
-        'compacto': 'py-1',
-        'normal': 'py-2',
-        'amplo': 'py-3'
+    const sidebarGapClass = {
+        'compacto': 'gap-4',
+        'normal': 'gap-8',
+        'amplo': 'gap-12'
+    }[espacamento];
+
+    const mbClass = {
+        'compacto': 'mb-3',
+        'normal': 'mb-6',
+        'amplo': 'mb-8'
     }[espacamento];
 
     return (
@@ -56,13 +63,13 @@ export default function Template1({ data, customizacao }: TemplateProps) {
             >
                 {/* Left Sidebar */}
                 <div
-                    className="w-1/3 text-white p-6 flex flex-col gap-6"
+                    className={`w-1/3 text-white p-6 flex flex-col ${sidebarGapClass}`}
                     style={{
                         backgroundColor: 'var(--color-primary)',
                         color: 'white'
                     }}
                 >
-                    <div className="text-center">
+                    <div className="text-center w-full flex flex-col gap-4">
                         {/* Header / Sidebar Top */}
                         <div className="flex flex-col items-center">
                             {data.pessoal.foto_url && (
@@ -76,26 +83,28 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                         <div className="flex flex-col gap-3 text-sm">
                             <h2 className="text-lg font-bold">Contato</h2>
-                            <div className="flex items-center gap-2">
-                                <Mail className="w-4 h-4" /> <span>{data.pessoal.email}</span>
+                            <div className="flex items-center gap-2 break-all">
+                                <Mail className="w-4 h-4 shrink-0" /> <span>{data.pessoal.email}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                <Phone className="w-4 h-4" /> <span>{data.pessoal.telefone}</span>
+                                <Phone className="w-4 h-4 shrink-0" /> <span>{data.pessoal.telefone}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <MapPin className="w-4 h-4" /> <span>{data.pessoal.localizacao}</span>
-                            </div>
-                            {data.pessoal.linkedin && (
+                            {data.pessoal.localizacao && (
                                 <div className="flex items-center gap-2">
-                                    <Linkedin className="w-4 h-4" /> <span>{data.pessoal.linkedin}</span>
+                                    <MapPin className="w-4 h-4 shrink-0" /> <span>{data.pessoal.localizacao}</span>
+                                </div>
+                            )}
+                            {data.pessoal.linkedin && (
+                                <div className="flex items-center gap-2 break-all">
+                                    <Linkedin className="w-4 h-4 shrink-0" /> <span>{data.pessoal.linkedin}</span>
                                 </div>
                             )}
                         </div>
 
                         {customizacao.secoes_visiveis.skills && data.skills.length > 0 && (
-                            <div>
+                            <div className="mt-4">
                                 <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Habilidades</h2>
-                                <div className="flex flex-wrap gap-2">
+                                <div className="flex flex-wrap gap-2 justify-center">
                                     {data.skills.map((skill, i) => (
                                         <span key={i} className="bg-white/20 px-2 py-1 rounded text-xs">
                                             {skill}
@@ -106,7 +115,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                         )}
 
                         {customizacao.secoes_visiveis.idiomas && data.idiomas.length > 0 && (
-                            <div>
+                            <div className="mt-4">
                                 <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Idiomas</h2>
                                 <div className="flex flex-col gap-2">
                                     {data.idiomas.map((lang, i) => (
@@ -123,23 +132,24 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                 {/* Main Content */}
                 <div className="w-2/3 p-8 flex flex-col" style={{ color: 'var(--color-text)' }}>
-                    <div className="mb-6">
-                        <h1 className="text-3xl font-bold uppercase tracking-wider" style={{ color: 'var(--color-primary)' }}>
+                    <div className={mbClass}>
+                        <h1 className="text-3xl font-bold uppercase tracking-wider leading-tight" style={{ color: 'var(--color-primary)' }}>
                             {data.pessoal.nome} <span style={{ color: 'var(--color-secondary)' }}>{data.pessoal.sobrenome}</span>
                         </h1>
+                        <p className="text-lg font-medium mt-1 opacity-80">{data.pessoal.cargo}</p>
                     </div>
 
                     {customizacao.secoes_visiveis.perfil && (
-                        <div className={`mb-6 ${spacingClass}`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-2" style={{ borderColor: 'var(--color-secondary)' }}>Resumo</h3>
-                            <p className="text-justify leading-relaxed">{data.resumo}</p>
+                        <div className={`${mbClass} flex flex-col ${gapClass}`}>
+                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Resumo</h3>
+                            <p className="text-justify leading-relaxed whitespace-pre-line">{data.resumo}</p>
                         </div>
                     )}
 
                     {customizacao.secoes_visiveis.experiencias && data.experiencias.length > 0 && (
-                        <div className={`mb-6`}>
+                        <div className={mbClass}>
                             <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Experiência Profissional</h3>
-                            <div className={`flex flex-col ${spacingClass}`}>
+                            <div className={`flex flex-col ${gapClass}`}>
                                 {data.experiencias.map((exp, i) => (
                                     <div key={i}>
                                         <div className="flex justify-between items-baseline mb-1">
@@ -155,7 +165,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <p className="text-sm mb-2 whitespace-pre-line">{exp.descricao}</p>
+                                            <p className="text-sm mb-2 whitespace-pre-line text-justify">{exp.descricao}</p>
                                         )}
                                     </div>
                                 ))}
@@ -164,15 +174,15 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                     )}
 
                     {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
-                        <div className={`mb-6`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Certificações</h3>
+                        <div className={`${mbClass} flex flex-col ${gapClass}`}>
+                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Certificações</h3>
                             <p className="text-sm whitespace-pre-line">{data.certificacoes}</p>
                         </div>
                     )}
 
                     {customizacao.secoes_visiveis.educacao && data.educacao.length > 0 && (
-                        <div className={`mb-6`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Educação</h3>
+                        <div className={`${mbClass} flex flex-col ${gapClass}`}>
+                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Educação</h3>
                             <p className="whitespace-pre-line opacity-80">{data.educacao}</p>
                         </div>
                     )}

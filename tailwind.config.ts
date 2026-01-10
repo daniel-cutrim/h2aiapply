@@ -19,6 +19,15 @@ const config: Config = {
             },
         },
     },
+    safelist: [
+        // Spacing classes for Template1
+        'gap-2', 'gap-8', 'gap-16',
+        'py-1', 'py-2', 'py-3',
+        // Spacing classes for Template2
+        'gap-3', 'gap-5', 'gap-8',
+        // Spacing classes for Template3
+        'space-y-4', 'space-y-8', 'space-y-12',
+    ],
     plugins: [],
 };
 export default config;

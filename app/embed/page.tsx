@@ -29,7 +29,7 @@ export default function EmbedPage() {
             router.replace(`/curriculo?${params.toString()}`);
             return (
                 <div className="flex items-center justify-center min-h-screen bg-transparent">
-                    <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                    <Loader2 className="w-8 h-8 animate-spin text-[#fe4a21]" />
                 </div>
             );
         }
@@ -111,8 +111,8 @@ export default function EmbedPage() {
             <div className="bg-white/90 backdrop-blur-sm rounded-xl shadow-lg p-6 max-w-sm w-full text-center space-y-4 border border-gray-100">
 
                 <div className="flex items-center justify-center space-x-2 mb-2">
-                    <div className="bg-blue-100 p-2 rounded-full">
-                        <Sparkles className="w-5 h-5 text-blue-600" />
+                    <div className="bg-[#fe4a21]/10 p-2 rounded-full">
+                        <Sparkles className="w-5 h-5 text-[#fe4a21]" />
                     </div>
                     <h1 className="text-xl font-bold text-gray-900">
                         AI Resume

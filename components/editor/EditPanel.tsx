@@ -27,19 +27,19 @@ export default function EditPanel() {
                 <div className="flex gap-2 border-b mb-6 pb-2 dark:border-slate-700">
                     <button
                         onClick={() => setActiveTab('conteudo')}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'conteudo' ? 'bg-slate-900 text-white dark:bg-blue-600' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'}`}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'conteudo' ? 'bg-slate-900 text-white dark:bg-[#fe4a21]' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'}`}
                     >
                         {t('editor.tabs.content')}
                     </button>
                     <button
                         onClick={() => setActiveTab('design')}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'design' ? 'bg-slate-900 text-white dark:bg-blue-600' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'}`}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'design' ? 'bg-slate-900 text-white dark:bg-[#fe4a21]' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'}`}
                     >
                         {t('editor.tabs.design')}
                     </button>
                     <button
                         onClick={() => setActiveTab('templates')}
-                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'templates' ? 'bg-slate-900 text-white dark:bg-blue-600' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'}`}
+                        className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${activeTab === 'templates' ? 'bg-slate-900 text-white dark:bg-[#fe4a21]' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-800'}`}
                     >
                         {t('editor.tabs.templates')}
                     </button>
@@ -107,13 +107,13 @@ export default function EditPanel() {
                                     <div className="flex gap-2">
                                         <button
                                             onClick={() => updateCustomizacao({ modelo_foto: 'circular' })}
-                                            className={`flex-1 py-2 text-xs border rounded transition-all ${customizacao.modelo_foto === 'circular' ? 'bg-slate-900 text-white border-slate-900 dark:bg-blue-600 dark:border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 dark:hover:bg-slate-700'}`}
+                                            className={`flex-1 py-2 text-xs border rounded transition-all ${customizacao.modelo_foto === 'circular' ? 'bg-slate-900 text-white border-slate-900 dark:bg-[#fe4a21] dark:border-[#fe4a21]' : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 dark:hover:bg-slate-700'}`}
                                         >
                                             {t('editor.personal.circular')}
                                         </button>
                                         <button
                                             onClick={() => updateCustomizacao({ modelo_foto: 'quadrado' })}
-                                            className={`flex-1 py-2 text-xs border rounded transition-all ${customizacao.modelo_foto === 'quadrado' ? 'bg-slate-900 text-white border-slate-900 dark:bg-blue-600 dark:border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 dark:hover:bg-slate-700'}`}
+                                            className={`flex-1 py-2 text-xs border rounded transition-all ${customizacao.modelo_foto === 'quadrado' ? 'bg-slate-900 text-white border-slate-900 dark:bg-[#fe4a21] dark:border-[#fe4a21]' : 'bg-white text-gray-700 hover:bg-gray-50 dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 dark:hover:bg-slate-700'}`}
                                         >
                                             {t('editor.personal.square')}
                                         </button>
@@ -193,7 +193,7 @@ export default function EditPanel() {
                                 <Button
                                     variant="outline"
                                     size="sm"
-                                    className="text-black border-black hover:bg-gray-100 dark:text-white dark:border-gray-500 dark:hover:bg-slate-800"
+                                    className="text-black border-black hover:bg-gray-100 dark:text-white dark:border-gray-500 dark:bg-transparent dark:hover:bg-slate-800"
                                     onClick={() => {
                                         const newExp = [
                                             ...(dados.experiencias || []),
@@ -405,24 +405,24 @@ export default function EditPanel() {
                     <div className="grid grid-cols-1 gap-4">
                         <button
                             onClick={() => setTemplate('template_1')}
-                            className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_1' ? 'ring-2 ring-blue-600 border-transparent' : 'hover:border-blue-400'}`}
+                            className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_1' ? 'ring-2 ring-[#fe4a21] border-transparent' : 'hover:border-[#fe4a21]/50'}`}
                         >
-                            <div className="font-bold text-gray-900">Profissional Moderno</div>
-                            <div className="text-sm text-gray-700">Sidebar azul e layout de 2 colunas.</div>
+                            <div className="font-bold text-gray-900 dark:text-white">Profissional Moderno</div>
+                            <div className="text-sm text-gray-700 dark:text-gray-300">Sidebar azul e layout de 2 colunas.</div>
                         </button>
                         <button
                             onClick={() => setTemplate('template_2')}
-                            className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_2' ? 'ring-2 ring-blue-600 border-transparent' : 'hover:border-blue-400'}`}
+                            className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_2' ? 'ring-2 ring-[#fe4a21] border-transparent' : 'hover:border-[#fe4a21]/50'}`}
                         >
-                            <div className="font-bold text-gray-900">Criativo Bold</div>
-                            <div className="text-sm text-gray-700">Header largo e cores vibrantes.</div>
+                            <div className="font-bold text-gray-900 dark:text-white">Criativo Bold</div>
+                            <div className="text-sm text-gray-700 dark:text-gray-300">Header largo e cores vibrantes.</div>
                         </button>
                         <button
                             onClick={() => setTemplate('template_3')}
-                            className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_3' ? 'ring-2 ring-blue-600 border-transparent' : 'hover:border-blue-400'}`}
+                            className={`p-4 border rounded-lg text-left transition-all ${curriculo.template_id === 'template_3' ? 'ring-2 ring-[#fe4a21] border-transparent' : 'hover:border-[#fe4a21]/50'}`}
                         >
-                            <div className="font-bold text-gray-900">Minimalista Clean</div>
-                            <div className="text-sm text-gray-700">Preto e branco, foco no conteúdo.</div>
+                            <div className="font-bold text-gray-900 dark:text-white">Minimalista Clean</div>
+                            <div className="text-sm text-gray-700 dark:text-gray-300">Preto e branco, foco no conteúdo.</div>
                         </button>
                     </div>
                 )}

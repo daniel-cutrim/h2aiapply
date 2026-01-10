@@ -16,6 +16,12 @@ export default function Template3({ data, customizacao }: TemplateProps) {
         fontFamily: fonte,
     } as React.CSSProperties;
 
+    const spacingClass = {
+        'compacto': 'space-y-4',
+        'normal': 'space-y-8',
+        'amplo': 'space-y-12'
+    }[espacamento];
+
     return (
         <div
             className="w-[210mm] min-h-[297mm] bg-white shadow-xl mx-auto p-12 text-sm flex flex-col print:shadow-none print:print-color-adjust-exact text-black"
@@ -46,7 +52,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
 
             <div className="flex gap-12">
                 {/* Left Col */}
-                <div className="w-1/4 space-y-8">
+                <div className={`w-1/4 ${spacingClass}`}>
                     {customizacao.secoes_visiveis.skills && (
                         <div>
                             <h3 className="font-bold uppercase tracking-widest text-xs mb-3 border-b pb-1">Habilidades</h3>
@@ -67,7 +73,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                 </div>
 
                 {/* Right Col (Main) */}
-                <div className="flex-1 space-y-8">
+                <div className={`flex-1 ${spacingClass}`}>
                     <div>
                         <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Perfil</h3>
                         <p className="text-justify text-gray-900">{data.resumo}</p>
