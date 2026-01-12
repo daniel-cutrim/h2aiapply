@@ -10,9 +10,10 @@ import * as htmlToImage from 'html-to-image';
 
 interface PreviewPanelProps {
     jobId?: string;
+    alunoId?: string;
 }
 
-export default function PreviewPanel({ jobId }: PreviewPanelProps) {
+export default function PreviewPanel({ jobId, alunoId }: PreviewPanelProps) {
     const { curriculo } = useCurriculoStore();
     const [isExporting, setIsExporting] = useState(false);
     const [isSending, setIsSending] = useState(false);
@@ -47,10 +48,15 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
                 // Non-blocking call for speed, or blocking? 
                 // Let's make it blocking to ensure it fires, but catch errors so it doesn't stop download.
                 try {
+                    const payload: any = { curriculo_id: curriculo.id };
+                    if (alunoId) {
+                        payload.aluno_id = alunoId;
+                    }
+
                     await fetch(webhookUrl, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ curriculo_id: curriculo.id })
+                        body: JSON.stringify(payload)
                     });
                 } catch (webhookErr) {
                     console.error("Webhook trigger failed", webhookErr);
@@ -134,6 +140,10 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
                 curriculo_id: curriculo.id,
                 job_id: jobId
             };
+
+            if (alunoId) {
+                payload.aluno_id = alunoId;
+            }
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',

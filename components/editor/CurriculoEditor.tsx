@@ -13,9 +13,10 @@ interface CurriculoEditorProps {
     visual?: 'light' | 'dark';
     lang?: 'pt' | 'es';
     jobId?: string;
+    alunoId?: string;
 }
 
-export default function CurriculoEditor({ id, token, visual, lang, jobId }: CurriculoEditorProps) {
+export default function CurriculoEditor({ id, token, visual, lang, jobId, alunoId }: CurriculoEditorProps) {
     const { fetchCurriculo, isLoading, error, curriculo } = useCurriculoStore();
     const { setTheme, setLanguage } = useUiStore();
 
@@ -59,7 +60,7 @@ export default function CurriculoEditor({ id, token, visual, lang, jobId }: Curr
 
                 {/* Right Panel: Live Preview */}
                 <div className="w-full lg:w-2/3 bg-gray-100 dark:bg-slate-950 p-4 lg:p-8 overflow-auto flex justify-center items-start">
-                    <PreviewPanel jobId={jobId} />
+                    <PreviewPanel jobId={jobId} alunoId={alunoId} />
                 </div>
             </div>
         </div>

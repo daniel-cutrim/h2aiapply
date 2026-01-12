@@ -3,9 +3,9 @@ import { Suspense } from 'react';
 import CurriculoEditor from '@/components/editor/CurriculoEditor';
 
 export default async function CurriculoPage(props: {
-    searchParams: Promise<{ token?: string; id?: string; visual?: 'light' | 'dark'; lang?: 'pt' | 'es'; job_id?: string }>;
+    searchParams: Promise<{ token?: string; id?: string; visual?: 'light' | 'dark'; lang?: 'pt' | 'es'; job_id?: string; aluno_id?: string }>;
 }) {
-    const { token, id, visual, lang, job_id } = await props.searchParams;
+    const { token, id, visual, lang, job_id, aluno_id } = await props.searchParams;
 
     if (!token || !id) {
         return (
@@ -21,7 +21,7 @@ export default async function CurriculoPage(props: {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-slate-950">
             <Suspense fallback={<div className="p-10 text-center dark:text-gray-300">Carregando editor...</div>}>
-                <CurriculoEditor id={id} token={token} visual={visual} lang={lang} jobId={job_id} />
+                <CurriculoEditor id={id} token={token} visual={visual} lang={lang} jobId={job_id} alunoId={aluno_id} />
             </Suspense>
         </div>
     );
