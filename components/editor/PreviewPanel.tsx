@@ -3,7 +3,7 @@ import Template1 from '@/components/templates/Template1';
 import Template2 from '@/components/templates/Template2';
 import Template3 from '@/components/templates/Template3';
 import { Button } from '@/components/ui/button';
-import { Download, Loader2, Send, AlertTriangle } from 'lucide-react';
+import { Download, Loader2, Send, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 import * as htmlToImage from 'html-to-image';
 
@@ -17,6 +17,8 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
     const [isExporting, setIsExporting] = useState(false);
     const [isSending, setIsSending] = useState(false);
     const [showWarning, setShowWarning] = useState(false); // State for the warning popup
+    const [showJobWarning, setShowJobWarning] = useState(false); // State for missing job_id warning
+    const [showSuccessModal, setShowSuccessModal] = useState(false); // State for success modal
 
     if (!curriculo) return null;
 
@@ -114,6 +116,12 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
     const handleSendResume = async () => {
         if (!curriculo) return;
 
+        // Condition 1: Check if Job ID exists
+        if (!jobId) {
+            setShowJobWarning(true);
+            return;
+        }
+
         setIsSending(true);
         try {
             const webhookUrl = process.env.NEXT_PUBLIC_SEND_RESUME_WEBHOOK_URL;
@@ -124,12 +132,8 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
 
             const payload: any = {
                 curriculo_id: curriculo.id,
-                // Add other necessary fields if required by the webhook, e.g., token, user_id, etc.
+                job_id: jobId
             };
-
-            if (jobId) {
-                payload.job_id = jobId;
-            }
 
             const response = await fetch(webhookUrl, {
                 method: 'POST',
@@ -143,7 +147,9 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
                 throw new Error('Falha ao enviar currículo');
             }
 
-            alert('Currículo enviado com sucesso!');
+            // Condition 2: Success Modal instead of alert
+            setShowSuccessModal(true);
+
         } catch (error) {
             console.error('Erro ao enviar currículo:', error);
             alert('Erro ao enviar currículo. Tente novamente.');
@@ -213,6 +219,68 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
                                     onClick={confirmExport}
                                 >
                                     Confirmar Exportação
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Missing Job ID Warning */}
+            {showJobWarning && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-slate-800 transform transition-all scale-100">
+                        <div className="flex flex-col items-center text-center space-y-4">
+                            <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-full">
+                                <AlertTriangle className="w-8 h-8 text-orange-500" />
+                            </div>
+
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                Aviso
+                            </h3>
+
+                            <p className="text-gray-600 dark:text-gray-300">
+                                Nenhuma vaga foi selecionada.
+                                <br />
+                                Por favor, aplicar na Seção <span className="font-semibold">"Hub de Vagas"</span>.
+                            </p>
+
+                            <div className="w-full pt-4">
+                                <Button
+                                    className="w-full bg-orange-500 hover:bg-orange-600 text-white"
+                                    onClick={() => setShowJobWarning(false)}
+                                >
+                                    Entendi
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Success Modal */}
+            {showSuccessModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-sm w-full p-6 border border-gray-100 dark:border-slate-800 transform transition-all scale-100">
+                        <div className="flex flex-col items-center text-center space-y-4">
+                            <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-full">
+                                <CheckCircle className="w-10 h-10 text-green-500" />
+                            </div>
+
+                            <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+                                Enviado!
+                            </h3>
+
+                            <p className="text-gray-600 dark:text-gray-300">
+                                Seu currículo foi enviado com sucesso para a vaga.
+                            </p>
+
+                            <div className="w-full pt-2">
+                                <Button
+                                    className="w-full bg-green-600 hover:bg-green-700 text-white"
+                                    onClick={() => setShowSuccessModal(false)}
+                                >
+                                    Fechar
                                 </Button>
                             </div>
                         </div>
