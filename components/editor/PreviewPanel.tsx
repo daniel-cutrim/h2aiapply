@@ -3,7 +3,7 @@ import Template1 from '@/components/templates/Template1';
 import Template2 from '@/components/templates/Template2';
 import Template3 from '@/components/templates/Template3';
 import { Button } from '@/components/ui/button';
-import { Download, Loader2, Send } from 'lucide-react';
+import { Download, Loader2, Send, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import * as htmlToImage from 'html-to-image';
 
@@ -16,16 +16,54 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
     const { curriculo } = useCurriculoStore();
     const [isExporting, setIsExporting] = useState(false);
     const [isSending, setIsSending] = useState(false);
+    const [showWarning, setShowWarning] = useState(false); // State for the warning popup
 
     if (!curriculo) return null;
 
-    const handleExport = async () => {
+    // Modified: Opens the warning popup instead of exporting directly
+    const handleExportClick = () => {
+        // TEMPORARY: Bypass popup for now as requested
+        // setShowWarning(true);
+        confirmExport();
+    };
+
+    // New: The actual export + webhook function
+    const confirmExport = async () => {
+        setShowWarning(false); // Close modal
         setIsExporting(true);
+
+        // 1. Trigger Webhook (Fire and Forget or Await? User said "ir exportar... e também acionar".
+        // Usually safer to do it in parallel or after success, but "Each export consumes a credit" implies we should maybe notify start or success.
+        // User said: "Após isso, ele vai executar a mesma função atual e também irá acionar um webhook"
+        // "Após isso" refers to the popup. "ele vai executar a mesma função atual E TAMBÉM irá acionar".
+        // I will trigger it here.
+
         try {
+            // Webhook Trigger
+            const webhookUrl = process.env.NEXT_PUBLIC_EXPORT_WEBHOOK_URL;
+            if (webhookUrl) {
+                // Non-blocking call for speed, or blocking? 
+                // Let's make it blocking to ensure it fires, but catch errors so it doesn't stop download.
+                try {
+                    await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ curriculo_id: curriculo.id })
+                    });
+                } catch (webhookErr) {
+                    console.error("Webhook trigger failed", webhookErr);
+                    // Continue to export even if webhook fails? User said "consumirá", implies critical.
+                    // But if webhook is for tracking, maybe we shouldn't block user.
+                    // I will continue log it.
+                }
+            } else {
+                console.warn("NEXT_PUBLIC_EXPORT_WEBHOOK_URL not defined");
+                // Proceeding as user might add it later
+            }
+
+            // 2. Existing Export Logic
             const element = document.getElementById('resume-content');
             if (!element) return;
-
-            const htmlContent = element.outerHTML;
 
             const res = await fetch(`/api/curriculo/${curriculo.id}/export`, {
                 method: 'POST',
@@ -121,7 +159,7 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
                     {isSending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Send className="w-4 h-4 mr-2" />}
                     Enviar Currículo
                 </Button>
-                <Button onClick={handleExport} disabled={isExporting || isSending}>
+                <Button onClick={handleExportClick} disabled={isExporting || isSending}>
                     {isExporting ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Download className="w-4 h-4 mr-2" />}
                     Exportar PDF
                 </Button>
@@ -141,6 +179,46 @@ export default function PreviewPanel({ jobId }: PreviewPanelProps) {
                     <Template3 data={curriculo.dados} customizacao={curriculo.customizacao} />
                 )}
             </div>
+
+            {/* Warning Popup */}
+            {showWarning && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in duration-200">
+                    <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xl max-w-md w-full p-6 border border-gray-100 dark:border-slate-800 transform transition-all scale-100">
+                        <div className="flex flex-col items-center text-center space-y-4">
+                            <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-full">
+                                <AlertTriangle className="w-8 h-8 text-yellow-600 dark:text-yellow-500" />
+                            </div>
+
+                            <h3 className="text-xl font-bold text-gray-900 dark:text-gray-100">
+                                Atenção!
+                            </h3>
+
+                            <p className="text-gray-600 dark:text-gray-300">
+                                Revise seu currículo para ter certeza de que você irá exportar o currículo correto.
+                                <span className="block mt-2 font-medium text-gray-900 dark:text-gray-200">
+                                    Cada exportação consumirá +1 crédito.
+                                </span>
+                            </p>
+
+                            <div className="flex gap-3 w-full pt-4">
+                                <Button
+                                    variant="outline"
+                                    className="flex-1 bg-white hover:bg-gray-200 text-black dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                                    onClick={() => setShowWarning(false)}
+                                >
+                                    Cancelar
+                                </Button>
+                                <Button
+                                    className="flex-1 bg-black hover:bg-gray-800 text-white dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                                    onClick={confirmExport}
+                                >
+                                    Confirmar Exportação
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

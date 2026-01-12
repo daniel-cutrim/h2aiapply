@@ -61,7 +61,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                         <div>
                             <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
                                 <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
-                                Experiência
+                                Work Experience
                             </h3>
                             <div className="flex flex-col gap-6">
                                 {data.experiencias.map((exp, i) => (
@@ -88,7 +88,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                         <div>
                             <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
                                 <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
-                                Certificações
+                                Certifications
                             </h3>
                             <p className="whitespace-pre-line text-gray-800">{data.certificacoes}</p>
                         </div>
@@ -98,7 +98,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                         <div>
                             <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
                                 <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
-                                Educação
+                                Education
                             </h3>
                             <p className="whitespace-pre-line text-gray-700">{data.educacao}</p>
                         </div>
@@ -122,7 +122,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.idiomas && (
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Idiomas</h3>
+                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Languages</h3>
                             <ul className="space-y-2">
                                 {data.idiomas.map((lang, i) => (
                                     <li key={i} className="flex justify-between border-b border-gray-200 pb-1 last:border-0">

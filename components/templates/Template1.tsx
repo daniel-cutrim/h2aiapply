@@ -82,7 +82,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                         </div>
 
                         <div className="flex flex-col gap-3 text-sm">
-                            <h2 className="text-lg font-bold">Contato</h2>
+                            <h2 className="text-lg font-bold">Contact</h2>
                             <div className="flex items-center gap-2 break-all">
                                 <Mail className="w-4 h-4 shrink-0" /> <span>{data.pessoal.email}</span>
                             </div>
@@ -103,7 +103,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                         {customizacao.secoes_visiveis.skills && data.skills.length > 0 && (
                             <div className="mt-4">
-                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Habilidades</h2>
+                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Skills</h2>
                                 <div className="flex flex-wrap gap-2 justify-center">
                                     {data.skills.map((skill, i) => (
                                         <span key={i} className="bg-white/20 px-2 py-1 rounded text-xs">
@@ -116,7 +116,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                         {customizacao.secoes_visiveis.idiomas && data.idiomas.length > 0 && (
                             <div className="mt-4">
-                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Idiomas</h2>
+                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Languages</h2>
                                 <div className="flex flex-col gap-2">
                                     {data.idiomas.map((lang, i) => (
                                         <div key={i} className="flex justify-between">
@@ -141,14 +141,14 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.perfil && (
                         <div className={`${mbClass} flex flex-col ${gapClass}`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Resumo</h3>
+                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Profile</h3>
                             <p className="text-justify leading-relaxed whitespace-pre-line">{data.resumo}</p>
                         </div>
                     )}
 
                     {customizacao.secoes_visiveis.experiencias && data.experiencias.length > 0 && (
                         <div className={mbClass}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Experiência Profissional</h3>
+                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Work Experience</h3>
                             <div className={`flex flex-col ${gapClass}`}>
                                 {data.experiencias.map((exp, i) => (
                                     <div key={i}>
@@ -175,14 +175,14 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
                         <div className={`${mbClass} flex flex-col ${gapClass}`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Certificações</h3>
+                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Certifications</h3>
                             <p className="text-sm whitespace-pre-line">{data.certificacoes}</p>
                         </div>
                     )}
 
                     {customizacao.secoes_visiveis.educacao && data.educacao.length > 0 && (
                         <div className={`${mbClass} flex flex-col ${gapClass}`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Educação</h3>
+                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Education</h3>
                             <p className="whitespace-pre-line opacity-80">{data.educacao}</p>
                         </div>
                     )}

@@ -55,7 +55,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                 <div className={`w-1/4 ${spacingClass}`}>
                     {customizacao.secoes_visiveis.skills && (
                         <div>
-                            <h3 className="font-bold uppercase tracking-widest text-xs mb-3 border-b pb-1">Habilidades</h3>
+                            <h3 className="font-bold uppercase tracking-widest text-xs mb-3 border-b pb-1">Skills</h3>
                             <ul className="space-y-1 text-xs">
                                 {data.skills.map((s, i) => <li key={i}>{s}</li>)}
                             </ul>
@@ -64,7 +64,7 @@ export default function Template3({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.idiomas && (
                         <div>
-                            <h3 className="font-bold uppercase tracking-widest text-xs mb-3 border-b pb-1">Idiomas</h3>
+                            <h3 className="font-bold uppercase tracking-widest text-xs mb-3 border-b pb-1">Languages</h3>
                             <ul className="space-y-1 text-xs">
                                 {data.idiomas.map((l, i) => <li key={i}>{l.idioma} - {l.nivel}</li>)}
                             </ul>
@@ -75,13 +75,13 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                 {/* Right Col (Main) */}
                 <div className={`flex-1 ${spacingClass}`}>
                     <div>
-                        <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Perfil</h3>
+                        <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Profile</h3>
                         <p className="text-justify text-gray-900">{data.resumo}</p>
                     </div>
 
                     {customizacao.secoes_visiveis.experiencias && (
                         <div>
-                            <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Experiência</h3>
+                            <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Work Experience</h3>
                             <div className="space-y-6">
                                 {data.experiencias.map((exp, i) => (
                                     <div key={i}>
@@ -107,14 +107,14 @@ export default function Template3({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
                         <div>
-                            <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Certificações</h3>
+                            <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Certifications</h3>
                             <p className="text-gray-900 whitespace-pre-line text-sm">{data.certificacoes}</p>
                         </div>
                     )}
 
                     {customizacao.secoes_visiveis.educacao && (
                         <div>
-                            <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Educação</h3>
+                            <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Education</h3>
                             <p className="text-gray-900 whitespace-pre-line text-sm">{data.educacao}</p>
                         </div>
                     )}
