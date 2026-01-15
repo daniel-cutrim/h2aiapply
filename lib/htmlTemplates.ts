@@ -56,10 +56,20 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
         <div style="margin-bottom: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: baseline;">
                 <h4 style="font-weight: bold; margin: 0;">${escapeHtml(exp.cargo)}</h4>
-                <span style="font-size: 11px; background: #f1f5f9; padding: 2px 8px; border-radius: 4px;">${escapeHtml(exp.periodo)}</span>
+                <span style="font-size: 11px; background: #f1f5f9; padding: 2px 8px; border-radius: 4px; white-space: nowrap;">
+                    ${escapeHtml(exp.ano_inicio)} - ${escapeHtml(exp.ano_fim || 'Atualmente')}
+                </span>
             </div>
-            <div style="color: ${cores.secundaria}; font-weight: 600; margin: 4px 0;">${escapeHtml(exp.empresa)}</div>
-            <div style="font-size: 13px; white-space: pre-line;">${nl2br(exp.descricao)}</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 4px 0;">
+                <div style="color: ${cores.secundaria}; font-weight: 600;">${escapeHtml(exp.empresa)}</div>
+                ${exp.localizacao ? `<div style="font-size: 11px; font-style: italic; opacity: 0.7;">${escapeHtml(exp.localizacao)}</div>` : ''}
+            </div>
+            ${exp.formato === 'topicos'
+            ? `<ul style="margin: 4px 0 0 0; padding-left: 20px; font-size: 13px;">
+                    ${exp.descricao.split('•').filter(Boolean).map(line => `<li style="margin-bottom: 2px;">${escapeHtml(line.trim())}</li>`).join('')}
+                   </ul>`
+            : `<div style="font-size: 13px; white-space: pre-line; text-align: justify;">${nl2br(exp.descricao)}</div>`
+        }
         </div>
     `).join('');
 
@@ -119,17 +129,40 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
                 </div>
                 ` : ''}
                 
-                ${secoes_visiveis.certificacoes && certificacoes ? `
+                ${secoes_visiveis.certificacoes && certificacoes && certificacoes.length > 0 ? `
                 <div style="margin-bottom: 24px;">
                     <h3 style="font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid ${cores.secundaria}; padding-bottom: 4px; margin-bottom: 8px;">Certificações</h3>
-                    <p style="white-space: pre-line;">${nl2br(certificacoes)}</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        ${certificacoes.map(cert => `
+                            <div style="display: flex; justify-content: space-between; font-size: 13px;">
+                                <div>
+                                    <span style="font-weight: bold;">${escapeHtml(cert.nome)}</span>
+                                    <span style="opacity: 0.8;"> - ${escapeHtml(cert.emissor)}</span>
+                                </div>
+                                <div style="font-weight: 600; white-space: nowrap;">${escapeHtml(cert.ano_obtencao)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
                 ` : ''}
                 
-                ${secoes_visiveis.educacao && educacao ? `
+                ${secoes_visiveis.educacao && educacao && educacao.length > 0 ? `
                 <div style="margin-bottom: 24px;">
                     <h3 style="font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid ${cores.secundaria}; padding-bottom: 4px; margin-bottom: 8px;">Educação</h3>
-                    <p style="white-space: pre-line;">${nl2br(educacao)}</p>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        ${educacao.map(edu => `
+                            <div>
+                                <div style="display: flex; justify-content: space-between;">
+                                    <h4 style="font-weight: bold; font-size: 14px; margin: 0;">${escapeHtml(edu.grau)}</h4>
+                                    <span style="font-size: 11px; background: #f1f5f9; padding: 2px 6px; border-radius: 4px; white-space: nowrap;">
+                                        ${escapeHtml(edu.ano_inicio)} - ${escapeHtml(edu.ano_fim || 'Atualmente')}
+                                    </span>
+                                </div>
+                                <div style="font-size: 13px; opacity: 0.9;">${escapeHtml(edu.instituicao)}</div>
+                                ${edu.area_estudo ? `<div style="font-size: 12px; opacity: 0.75;">${escapeHtml(edu.area_estudo)}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
                 </div>
                 ` : ''}
             </div>
@@ -179,8 +212,18 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                         ${experiencias.map(exp => `
                             <div style="margin-bottom: 16px; padding-left: 12px; border-left: 3px solid ${cores.secundaria};">
                                 <h4 style="font-weight: bold; margin: 0;">${escapeHtml(exp.cargo)}</h4>
-                                <div style="color: ${cores.secundaria}; font-size: 13px;">${escapeHtml(exp.empresa)} | ${escapeHtml(exp.periodo)}</div>
-                                <p style="font-size: 13px; margin-top: 8px; white-space: pre-line;">${nl2br(exp.descricao)}</p>
+                                <div style="color: ${cores.secundaria}; font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px;">
+                                    <span>${escapeHtml(exp.empresa)}</span>
+                                    <span>|</span>
+                                    <span>${escapeHtml(exp.ano_inicio)} - ${escapeHtml(exp.ano_fim || 'Atualmente')}</span>
+                                    ${exp.localizacao ? `<span>|</span><span style="font-style: italic;">${escapeHtml(exp.localizacao)}</span>` : ''}
+                                </div>
+                                ${exp.formato === 'topicos'
+            ? `<ul style="margin: 8px 0 0 0; padding-left: 20px; font-size: 13px;">
+                                        ${exp.descricao.split('•').filter(Boolean).map(line => `<li style="margin-bottom: 2px;">${escapeHtml(line.trim())}</li>`).join('')}
+                                       </ul>`
+            : `<p style="font-size: 13px; margin-top: 8px; white-space: pre-line;">${nl2br(exp.descricao)}</p>`
+        }
                             </div>
                         `).join('')}
                     </div>
@@ -203,17 +246,32 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.educacao && educacao ? `
+                    ${secoes_visiveis.educacao && educacao && educacao.length > 0 ? `
                     <div style="margin-bottom: 20px;">
                         <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Educação</h3>
-                        <p style="font-size: 12px; white-space: pre-line;">${nl2br(educacao)}</p>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${educacao.map(edu => `
+                                <div>
+                                    <h4 style="font-weight: bold; font-size: 13px; margin: 0;">${escapeHtml(edu.grau)}</h4>
+                                    <div style="font-size: 12px; font-weight: 500;">${escapeHtml(edu.instituicao)}</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">${escapeHtml(edu.ano_inicio)} - ${escapeHtml(edu.ano_fim || 'Atualmente')}</div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.certificacoes && certificacoes ? `
+                    ${secoes_visiveis.certificacoes && certificacoes && certificacoes.length > 0 ? `
                     <div>
                         <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Certificações</h3>
-                        <p style="font-size: 12px; white-space: pre-line;">${nl2br(certificacoes)}</p>
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            ${certificacoes.map(cert => `
+                                <div style="padding-left: 8px; border-left: 2px solid ${cores.secundaria};">
+                                    <div style="font-weight: bold; font-size: 12px;">${escapeHtml(cert.nome)}</div>
+                                    <div style="font-size: 11px; opacity: 0.8;">${escapeHtml(cert.emissor)} • ${escapeHtml(cert.ano_obtencao)}</div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                     ` : ''}
                 </div>
@@ -280,28 +338,57 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Experiência</h3>
                         ${experiencias.map(exp => `
                             <div style="margin-bottom: 16px;">
-                                <div style="display: flex; justify-content: space-between;">
+                                <div style="display: flex; justify-content: space-between; align-items: baseline;">
                                     <strong>${escapeHtml(exp.cargo)}</strong>
-                                    <span style="font-size: 12px; opacity: 0.7;">${escapeHtml(exp.periodo)}</span>
+                                    <span style="font-size: 12px; opacity: 0.7; white-space: nowrap;">${escapeHtml(exp.ano_inicio)} - ${escapeHtml(exp.ano_fim || 'Atualmente')}</span>
                                 </div>
-                                <div style="font-size: 13px; opacity: 0.8;">${escapeHtml(exp.empresa)}</div>
-                                <p style="font-size: 13px; margin-top: 8px; white-space: pre-line;">${nl2br(exp.descricao)}</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                    <div style="font-size: 13px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px;">${escapeHtml(exp.empresa)}</div>
+                                    ${exp.localizacao ? `<div style="font-size: 11px; opacity: 0.6;">${escapeHtml(exp.localizacao)}</div>` : ''}
+                                </div>
+                                ${exp.formato === 'topicos'
+            ? `<ul style="margin: 4px 0 0 0; padding-left: 20px; font-size: 13px;">
+                                        ${exp.descricao.split('•').filter(Boolean).map(line => `<li style="margin-bottom: 2px;">${escapeHtml(line.trim())}</li>`).join('')}
+                                       </ul>`
+            : `<p style="font-size: 13px; margin-top: 4px; white-space: pre-line; text-align: justify;">${nl2br(exp.descricao)}</p>`
+        }
                             </div>
                         `).join('')}
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.educacao && educacao ? `
+                    ${secoes_visiveis.educacao && educacao && educacao.length > 0 ? `
                     <div style="margin-bottom: 24px;">
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Educação</h3>
-                        <p style="font-size: 13px; white-space: pre-line;">${nl2br(educacao)}</p>
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            ${educacao.map(edu => `
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                        <h4 style="font-weight: bold; font-size: 13px; margin: 0;">${escapeHtml(edu.grau)}</h4>
+                                        <span style="font-size: 11px; opacity: 0.7; white-space: nowrap;">${escapeHtml(edu.ano_inicio)} - ${escapeHtml(edu.ano_fim || 'Atualmente')}</span>
+                                    </div>
+                                    <div style="font-size: 12px; text-transform: uppercase; opacity: 0.8;">${escapeHtml(edu.instituicao)}</div>
+                                    ${edu.area_estudo ? `<div style="font-size: 11px; font-style: italic; opacity: 0.6;">${escapeHtml(edu.area_estudo)}</div>` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.certificacoes && certificacoes ? `
+                    ${secoes_visiveis.certificacoes && certificacoes && certificacoes.length > 0 ? `
                     <div>
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Certificações</h3>
-                        <p style="font-size: 13px; white-space: pre-line;">${nl2br(certificacoes)}</p>
+                        <div style="display: flex; flex-direction: column; gap: 8px;">
+                            ${certificacoes.map(cert => `
+                                <div>
+                                    <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                                        <span style="font-weight: bold; font-size: 13px;">${escapeHtml(cert.nome)}</span>
+                                        <span style="font-size: 11px; opacity: 0.7;">${escapeHtml(cert.ano_obtencao)}</span>
+                                    </div>
+                                    <div style="font-size: 11px; text-transform: uppercase; opacity: 0.8;">${escapeHtml(cert.emissor)}</div>
+                                </div>
+                            `).join('')}
+                        </div>
                     </div>
                     ` : ''}
                 </div>
