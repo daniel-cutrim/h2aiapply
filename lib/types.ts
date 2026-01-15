@@ -17,17 +17,30 @@ export interface Experiencia {
     id: string; // Helper for React keys
     empresa: string;
     cargo: string;
-    periodo: string;
+    // periodo: string; // REMOVED in favor of start/end
+    ano_inicio: string;
+    ano_fim?: string; // Optional (empty = current)
+    localizacao?: string;
     descricao: string; // HTML/Text content
     formato: 'texto' | 'topicos'; // Switch for UI
 }
 
-export interface Educacao {
+export interface EducacaoItem {
     id: string;
+    grau: string; // Grau/Título
     instituicao: string;
-    curso: string;
-    periodo: string;
-    descricao: string;
+    area_estudo?: string;
+    ano_inicio: string;
+    ano_fim?: string;
+}
+
+export interface CertificacaoItem {
+    id: string;
+    nome: string;
+    emissor: string;
+    ano_obtencao: string;
+    validade?: string;
+    credencial_id?: string;
 }
 
 export type NivelIdioma = 'Studying' | 'Basic' | 'Intermediate' | 'Advanced' | 'Native';
@@ -41,10 +54,10 @@ export interface CurriculoData {
     pessoal: Pessoal;
     resumo: string;
     experiencias: Experiencia[];
-    educacao: string;
+    educacao: EducacaoItem[]; // Changed from string to array
     skills: string[]; // List of strings
     idiomas: Idioma[]; // Fixed list
-    certificacoes: string; // Free text area
+    certificacoes: CertificacaoItem[]; // Changed from string to array
 }
 
 export interface Customizacao {

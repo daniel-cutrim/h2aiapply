@@ -175,14 +175,119 @@ export default function EditPanel() {
 
                         {/* Educação */}
                         <div className="space-y-4 pt-4 border-t dark:border-slate-700">
-                            <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('editor.education.title')}</h3>
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('editor.education.title')}</h3>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-black border-black hover:bg-gray-100 dark:text-white dark:border-gray-500 dark:bg-transparent dark:hover:bg-slate-800"
+                                    onClick={() => {
+                                        const newEdu = Array.isArray(dados.educacao) ? [...dados.educacao] : [];
+                                        newEdu.push({
+                                            id: crypto.randomUUID(),
+                                            grau: '',
+                                            instituicao: '',
+                                            area_estudo: '',
+                                            ano_inicio: new Date().getFullYear().toString(),
+                                            ano_fim: ''
+                                        });
+                                        updateDados({ educacao: newEdu });
+                                    }}
+                                >
+                                    {t('editor.education.add')}
+                                </Button>
+                            </div>
                             <p className="text-xs text-gray-700 dark:text-gray-400">{t('editor.education.hint')}</p>
-                            <textarea
-                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 dark:bg-slate-800 dark:text-gray-100 dark:border-slate-700"
-                                value={typeof dados.educacao === 'string' ? dados.educacao : ''}
-                                onChange={(e) => updateDados({ educacao: e.target.value })}
-                                placeholder="Bachelor's Degree&#10;University Name&#10;2020 - 2024"
-                            />
+
+                            {(Array.isArray(dados.educacao) ? dados.educacao : []).map((edu, index) => (
+                                <div key={edu.id || index} className="space-y-3 p-4 border rounded-lg bg-gray-50 relative group dark:bg-slate-800 dark:border-slate-700">
+                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-red-500 hover:text-red-700 h-6 px-2 dark:hover:bg-red-900/20"
+                                            onClick={() => {
+                                                const newEdu = [...(dados.educacao as any[])];
+                                                newEdu.splice(index, 1);
+                                                updateDados({ educacao: newEdu });
+                                            }}
+                                        >
+                                            {t('editor.education.delete')}
+                                        </Button>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.education.degree')} <span className="text-red-500">*</span></Label>
+                                        <Input
+                                            className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                            value={edu.grau}
+                                            placeholder="Ex: Ensino Médio Completo, Técnico em Agronomia..."
+                                            onChange={(e) => {
+                                                const newEdu = [...(dados.educacao as any[])];
+                                                newEdu[index] = { ...edu, grau: e.target.value };
+                                                updateDados({ educacao: newEdu });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.education.institution')} <span className="text-red-500">*</span></Label>
+                                        <Input
+                                            className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                            value={edu.instituicao}
+                                            placeholder="Ex: Universidade Federal..."
+                                            onChange={(e) => {
+                                                const newEdu = [...(dados.educacao as any[])];
+                                                newEdu[index] = { ...edu, instituicao: e.target.value };
+                                                updateDados({ educacao: newEdu });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.education.fieldOfStudy')}</Label>
+                                        <Input
+                                            className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                            value={edu.area_estudo || ''}
+                                            placeholder="Ex: Agricultura, Administração..."
+                                            onChange={(e) => {
+                                                const newEdu = [...(dados.educacao as any[])];
+                                                newEdu[index] = { ...edu, area_estudo: e.target.value };
+                                                updateDados({ educacao: newEdu });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.education.startDate')} <span className="text-red-500">*</span></Label>
+                                            <Input
+                                                className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                value={edu.ano_inicio}
+                                                placeholder="2020"
+                                                onChange={(e) => {
+                                                    const newEdu = [...(dados.educacao as any[])];
+                                                    newEdu[index] = { ...edu, ano_inicio: e.target.value };
+                                                    updateDados({ educacao: newEdu });
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.education.endDate')}</Label>
+                                            <Input
+                                                className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                value={edu.ano_fim || ''}
+                                                placeholder="Deixe vazio se ainda cursando"
+                                                onChange={(e) => {
+                                                    const newEdu = [...(dados.educacao as any[])];
+                                                    newEdu[index] = { ...edu, ano_fim: e.target.value };
+                                                    updateDados({ educacao: newEdu });
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
 
@@ -199,10 +304,12 @@ export default function EditPanel() {
                                             ...(dados.experiencias || []),
                                             {
                                                 id: crypto.randomUUID(),
-                                                empresa: 'Nova Empresa',
-                                                cargo: 'Cargo',
-                                                periodo: '2023 - Atual',
-                                                descricao: 'Descrição das atividades...',
+                                                empresa: '',
+                                                cargo: '',
+                                                ano_inicio: new Date().getFullYear().toString(),
+                                                ano_fim: '',
+                                                localizacao: '',
+                                                descricao: '',
                                                 formato: 'texto' as const
                                             }
                                         ];
@@ -257,16 +364,46 @@ export default function EditPanel() {
                                         </div>
                                     </div>
                                     <div className="space-y-1">
-                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.experience.period')}</Label>
+                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.experience.location')}</Label>
                                         <Input
                                             className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
-                                            value={exp.periodo}
+                                            value={exp.localizacao || ''}
+                                            placeholder="Ex: São Paulo, SP"
                                             onChange={(e) => {
                                                 const newExp = [...dados.experiencias];
-                                                newExp[index] = { ...exp, periodo: e.target.value };
+                                                newExp[index] = { ...exp, localizacao: e.target.value };
                                                 updateDados({ experiencias: newExp });
                                             }}
                                         />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.experience.startDate')} <span className="text-red-500">*</span></Label>
+                                            <Input
+                                                className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                value={exp.ano_inicio}
+                                                placeholder="2020"
+                                                onChange={(e) => {
+                                                    const newExp = [...dados.experiencias];
+                                                    newExp[index] = { ...exp, ano_inicio: e.target.value };
+                                                    updateDados({ experiencias: newExp });
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.experience.endDate')}</Label>
+                                            <Input
+                                                className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                value={exp.ano_fim || ''}
+                                                placeholder="Deixe vazio se ainda cursando"
+                                                onChange={(e) => {
+                                                    const newExp = [...dados.experiencias];
+                                                    newExp[index] = { ...exp, ano_fim: e.target.value };
+                                                    updateDados({ experiencias: newExp });
+                                                }}
+                                            />
+                                        </div>
                                     </div>
 
                                     <div className="space-y-2">
@@ -343,14 +480,120 @@ export default function EditPanel() {
 
                         {/* Certificações */}
                         <div className="space-y-4 pt-4 border-t dark:border-slate-700">
-                            <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('editor.certifications.title')}</h3>
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('editor.certifications.title')}</h3>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-black border-black hover:bg-gray-100 dark:text-white dark:border-gray-500 dark:bg-transparent dark:hover:bg-slate-800"
+                                    onClick={() => {
+                                        const newCert = Array.isArray(dados.certificacoes) ? [...dados.certificacoes] : [];
+                                        newCert.push({
+                                            id: crypto.randomUUID(),
+                                            nome: '',
+                                            emissor: '',
+                                            ano_obtencao: new Date().getFullYear().toString(),
+                                            validade: '',
+                                            credencial_id: ''
+                                        });
+                                        updateDados({ certificacoes: newCert });
+                                    }}
+                                >
+                                    {t('editor.certifications.add')}
+                                </Button>
+                            </div>
                             <p className="text-xs text-gray-700 dark:text-gray-400">{t('editor.certifications.hint')}</p>
-                            <textarea
-                                className="flex min-h-[100px] w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-sm text-gray-900 dark:bg-slate-800 dark:text-gray-100 dark:border-slate-700"
-                                value={typeof dados.certificacoes === 'string' ? dados.certificacoes : ''}
-                                onChange={(e) => updateDados({ certificacoes: e.target.value })}
-                                placeholder="Bachelor's Degree&#10;Unifael&#10;Completed in 2025"
-                            />
+
+                            {(Array.isArray(dados.certificacoes) ? dados.certificacoes : []).map((cert, index) => (
+                                <div key={cert.id || index} className="space-y-3 p-4 border rounded-lg bg-gray-50 relative group dark:bg-slate-800 dark:border-slate-700">
+                                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-red-500 hover:text-red-700 h-6 px-2 dark:hover:bg-red-900/20"
+                                            onClick={() => {
+                                                const newCert = [...(dados.certificacoes as any[])];
+                                                newCert.splice(index, 1);
+                                                updateDados({ certificacoes: newCert });
+                                            }}
+                                        >
+                                            {t('editor.certifications.delete')}
+                                        </Button>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.certifications.name')} <span className="text-red-500">*</span></Label>
+                                        <Input
+                                            className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                            value={cert.nome}
+                                            placeholder="Ex: Curso de NR-35..."
+                                            onChange={(e) => {
+                                                const newCert = [...(dados.certificacoes as any[])];
+                                                newCert[index] = { ...cert, nome: e.target.value };
+                                                updateDados({ certificacoes: newCert });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.certifications.issuer')} <span className="text-red-500">*</span></Label>
+                                        <Input
+                                            className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                            value={cert.emissor}
+                                            placeholder="Ex: SENAI..."
+                                            onChange={(e) => {
+                                                const newCert = [...(dados.certificacoes as any[])];
+                                                newCert[index] = { ...cert, emissor: e.target.value };
+                                                updateDados({ certificacoes: newCert });
+                                            }}
+                                        />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.certifications.year')} <span className="text-red-500">*</span></Label>
+                                            <Input
+                                                className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                value={cert.ano_obtencao}
+                                                placeholder="2023"
+                                                onChange={(e) => {
+                                                    const newCert = [...(dados.certificacoes as any[])];
+                                                    newCert[index] = { ...cert, ano_obtencao: e.target.value };
+                                                    updateDados({ certificacoes: newCert });
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.certifications.validity')}</Label>
+                                            <Input
+                                                type="text" // Using text to allow dd/mm/aaaa format as placeholder suggests, or use type="date"
+                                                className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                value={cert.validade || ''}
+                                                placeholder="dd/mm/aaaa"
+                                                onChange={(e) => {
+                                                    const newCert = [...(dados.certificacoes as any[])];
+                                                    newCert[index] = { ...cert, validade: e.target.value };
+                                                    updateDados({ certificacoes: newCert });
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-1">
+                                        <Label className="text-xs text-gray-900 dark:text-gray-300">{t('editor.certifications.credentialId')}</Label>
+                                        <Input
+                                            className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                            value={cert.credencial_id || ''}
+                                            placeholder="Ex: ABC123456"
+                                            onChange={(e) => {
+                                                const newCert = [...(dados.certificacoes as any[])];
+                                                newCert[index] = { ...cert, credencial_id: e.target.value };
+                                                updateDados({ certificacoes: newCert });
+                                            }}
+                                        />
+                                    </div>
+                                </div>
+                            ))}
                         </div>
 
                         {/* Idiomas */}

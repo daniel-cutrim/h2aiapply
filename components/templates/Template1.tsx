@@ -154,9 +154,14 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                                     <div key={i}>
                                         <div className="flex justify-between items-baseline mb-1">
                                             <h4 className="font-bold text-base">{exp.cargo}</h4>
-                                            <span className="text-xs font-semibold px-2 py-1 bg-gray-100 rounded">{exp.periodo}</span>
+                                            <span className="text-xs font-semibold px-2 py-1 bg-gray-100 rounded text-black overflow-hidden whitespace-nowrap">
+                                                {exp.ano_inicio} - {exp.ano_fim || 'Atualmente'}
+                                            </span>
                                         </div>
-                                        <div className="text-sm font-semibold mb-1" style={{ color: 'var(--color-secondary)' }}>{exp.empresa}</div>
+                                        <div className="flex justify-between items-center mb-1">
+                                            <div className="text-sm font-semibold" style={{ color: 'var(--color-secondary)' }}>{exp.empresa}</div>
+                                            {exp.localizacao && <div className="text-xs opacity-70 italic">{exp.localizacao}</div>}
+                                        </div>
 
                                         {exp.formato === 'topicos' ? (
                                             <ul className="list-disc list-inside text-sm pl-2">
@@ -173,17 +178,40 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                         </div>
                     )}
 
-                    {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
+                    {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
                         <div className={`${mbClass} flex flex-col ${gapClass}`}>
                             <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Certifications</h3>
-                            <p className="text-sm whitespace-pre-line">{data.certificacoes}</p>
+                            <div className="flex flex-col gap-2">
+                                {data.certificacoes.map((cert, i) => (
+                                    <div key={i} className="flex justify-between text-sm">
+                                        <div>
+                                            <span className="font-bold">{cert.nome}</span>
+                                            <span className="opacity-80"> - {cert.emissor}</span>
+                                        </div>
+                                        <div className="text-xs font-semibold whitespace-nowrap">{cert.ano_obtencao}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
-                    {customizacao.secoes_visiveis.educacao && data.educacao.length > 0 && (
+                    {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
                         <div className={`${mbClass} flex flex-col ${gapClass}`}>
                             <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Education</h3>
-                            <p className="whitespace-pre-line opacity-80">{data.educacao}</p>
+                            <div className="flex flex-col gap-3">
+                                {data.educacao.map((edu, i) => (
+                                    <div key={i}>
+                                        <div className="flex justify-between">
+                                            <h4 className="font-bold">{edu.grau}</h4>
+                                            <span className="text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded text-black whitespace-nowrap">
+                                                {edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}
+                                            </span>
+                                        </div>
+                                        <div className="text-sm opacity-90">{edu.instituicao}</div>
+                                        {edu.area_estudo && <div className="text-xs opacity-75">{edu.area_estudo}</div>}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>

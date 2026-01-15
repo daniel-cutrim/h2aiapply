@@ -26,20 +26,37 @@ export const pt = {
         },
         education: {
             title: 'Educação',
-            hint: 'Liste sua formação acadêmica.'
+            hint: 'Liste sua formação acadêmica.',
+            add: '+ Adicionar Formação',
+            delete: 'Excluir',
+            degree: 'Grau/Título',
+            institution: 'Instituição',
+            fieldOfStudy: 'Área de Estudo',
+            startDate: 'Ano Início',
+            endDate: 'Ano Fim',
         },
         experience: {
             title: 'Experiências',
-            add: '+ Adicionar',
+            add: '+ Adicionar Experiência',
             delete: 'Excluir',
             role: 'Cargo',
             company: 'Empresa',
-            period: 'Período',
+            location: 'Localização',
+            startDate: 'Ano Início',
+            endDate: 'Ano Fim',
+            current: 'Atualmente',
             description: 'Descrição / Atividades'
         },
         certifications: {
             title: 'Certificações',
-            hint: 'Liste suas certificações em texto livre.'
+            hint: 'Liste suas certificações.',
+            add: '+ Adicionar Certificação',
+            delete: 'Excluir',
+            name: 'Nome do Certificado',
+            issuer: 'Emissor',
+            year: 'Ano de Obtenção',
+            validity: 'Validade',
+            credentialId: 'ID da Credencial'
         },
         languages: {
             title: 'Idiomas',

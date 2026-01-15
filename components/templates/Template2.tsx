@@ -68,7 +68,17 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                     <div key={i} className="relative pl-4 border-l-2 border-gray-200">
                                         <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-secondary)' }}></div>
                                         <h4 className="font-bold text-lg">{exp.cargo}</h4>
-                                        <div className="text-sm font-semibold text-gray-700 mb-1">{exp.empresa} | {exp.periodo}</div>
+                                        <div className="text-sm font-semibold text-gray-700 mb-1 flex flex-wrap gap-2">
+                                            <span>{exp.empresa}</span>
+                                            <span>|</span>
+                                            <span>{exp.ano_inicio} - {exp.ano_fim || 'Atualmente'}</span>
+                                            {exp.localizacao && (
+                                                <>
+                                                    <span>|</span>
+                                                    <span className="italic">{exp.localizacao}</span>
+                                                </>
+                                            )}
+                                        </div>
                                         {exp.formato === 'topicos' ? (
                                             <ul className="list-disc list-inside text-gray-800 pl-2">
                                                 {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
@@ -84,23 +94,38 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                         </div>
                     )}
 
-                    {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
+                    {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
                         <div>
                             <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
                                 <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
                                 Certifications
                             </h3>
-                            <p className="whitespace-pre-line text-gray-800">{data.certificacoes}</p>
+                            <div className="grid gap-3">
+                                {data.certificacoes.map((cert, i) => (
+                                    <div key={i} className="bg-gray-50 p-3 rounded-lg border-l-4" style={{ borderColor: 'var(--color-secondary)' }}>
+                                        <div className="font-bold text-gray-900">{cert.nome}</div>
+                                        <div className="text-sm text-gray-600">{cert.emissor} • {cert.ano_obtencao}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
-                    {customizacao.secoes_visiveis.educacao && (
+                    {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
                         <div>
                             <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
                                 <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
                                 Education
                             </h3>
-                            <p className="whitespace-pre-line text-gray-700">{data.educacao}</p>
+                            <div className="flex flex-col gap-4">
+                                {data.educacao.map((edu, i) => (
+                                    <div key={i}>
+                                        <h4 className="font-bold text-lg">{edu.grau}</h4>
+                                        <div className="text-gray-700 font-medium">{edu.instituicao}</div>
+                                        <div className="text-sm text-gray-500">{edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>

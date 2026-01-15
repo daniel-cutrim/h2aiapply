@@ -87,9 +87,12 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                                     <div key={i}>
                                         <div className="flex justify-between items-baseline mb-1">
                                             <h4 className="font-bold text-base">{exp.cargo}</h4>
-                                            <span className="text-xs italic">{exp.periodo}</span>
+                                            <span className="text-xs italic">{exp.ano_inicio} - {exp.ano_fim || 'Atualmente'}</span>
                                         </div>
-                                        <div className="text-xs uppercase tracking-wide mb-2">{exp.empresa}</div>
+                                        <div className="flex justify-between items-center mb-2">
+                                            <div className="text-xs uppercase tracking-wide">{exp.empresa}</div>
+                                            {exp.localizacao && <div className="text-[10px] text-gray-500">{exp.localizacao}</div>}
+                                        </div>
                                         {exp.formato === 'topicos' ? (
                                             <ul className="list-disc list-inside text-gray-900 pl-2">
                                                 {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
@@ -105,17 +108,38 @@ export default function Template3({ data, customizacao }: TemplateProps) {
                         </div>
                     )}
 
-                    {customizacao.secoes_visiveis.certificacoes && data.certificacoes && (
+                    {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
                         <div>
                             <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Certifications</h3>
-                            <p className="text-gray-900 whitespace-pre-line text-sm">{data.certificacoes}</p>
+                            <div className="space-y-3">
+                                {data.certificacoes.map((cert, i) => (
+                                    <div key={i}>
+                                        <div className="flex justify-between text-sm items-baseline">
+                                            <span className="font-bold text-gray-900">{cert.nome}</span>
+                                            <span className="text-xs text-gray-500">{cert.ano_obtencao}</span>
+                                        </div>
+                                        <div className="text-xs text-gray-600 uppercase">{cert.emissor}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
 
-                    {customizacao.secoes_visiveis.educacao && (
+                    {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
                         <div>
                             <h3 className="font-bold uppercase tracking-widest text-xs mb-4 border-b border-black pb-1">Education</h3>
-                            <p className="text-gray-900 whitespace-pre-line text-sm">{data.educacao}</p>
+                            <div className="space-y-4">
+                                {data.educacao.map((edu, i) => (
+                                    <div key={i}>
+                                        <div className="flex justify-between items-baseline">
+                                            <h4 className="font-bold text-sm text-gray-900">{edu.grau}</h4>
+                                            <span className="text-xs text-gray-500">{edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}</span>
+                                        </div>
+                                        <div className="text-xs text-gray-600 uppercase">{edu.instituicao}</div>
+                                        {edu.area_estudo && <div className="text-xs text-gray-500 italic mt-0.5">{edu.area_estudo}</div>}
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>
