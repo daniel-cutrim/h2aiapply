@@ -78,6 +78,15 @@ export interface Customizacao {
     };
     ordem_secoes: string[];
     modelo_foto: 'quadrado' | 'circular';
+    imagem_fundo?: {
+        url: string;
+        tipo: 'lateral_esquerda' | 'lateral_direita' | 'cabecalho' | 'inteiro';
+        opacidade: number; // 0-1
+        escala?: number; // 1 = 100%
+        posicao_x?: number; // %
+        posicao_y?: number; // %
+        rotacao?: number; // deg
+    };
 }
 
 export interface Curriculo {

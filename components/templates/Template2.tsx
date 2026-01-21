@@ -25,11 +25,34 @@ export default function Template2({ data, customizacao }: TemplateProps) {
 
     return (
         <div
-            className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto flex flex-col text-sm print:print-color-adjust-exact"
+            className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto flex flex-col text-sm print:print-color-adjust-exact relative overflow-hidden"
             style={{ ...containerStyle, printColorAdjust: 'exact', WebkitPrintColorAdjust: 'exact' }}
         >
+            {/* Background Image Layer */}
+            {customizacao.imagem_fundo?.url && (
+                <div
+                    className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
+                    style={{
+                        clipPath: customizacao.imagem_fundo.tipo === 'lateral_direita' ? 'polygon(66.66% 0, 100% 0, 100% 100%, 66.66% 100%)' :
+                            customizacao.imagem_fundo.tipo === 'cabecalho' ? 'polygon(0 0, 100% 0, 100% 250px, 0 250px)' :
+                                'none'
+                    }}
+                >
+                    <img
+                        src={customizacao.imagem_fundo.url}
+                        alt="Background"
+                        className="absolute object-cover w-full h-full"
+                        style={{
+                            opacity: customizacao.imagem_fundo.opacidade,
+                            transform: `translate(${customizacao.imagem_fundo.posicao_x ? customizacao.imagem_fundo.posicao_x - 50 : 0}%, ${customizacao.imagem_fundo.posicao_y ? customizacao.imagem_fundo.posicao_y - 50 : 0}%) scale(${customizacao.imagem_fundo.escala || 1}) rotate(${customizacao.imagem_fundo.rotacao || 0}deg)`,
+                            transformOrigin: 'center center'
+                        }}
+                    />
+                </div>
+            )}
+
             {/* Heavy Header */}
-            <div className="bg-[var(--color-primary)] rounded-xl p-8 mb-8 text-white shadow-lg relative overflow-hidden">
+            <div className="bg-[var(--color-primary)] rounded-xl p-8 mb-8 text-white shadow-lg relative overflow-hidden z-10 mx-8 mt-8">
                 <div className="relative z-10 flex items-center gap-6">
                     {data.pessoal.foto_url && (
                         <img
@@ -46,14 +69,14 @@ export default function Template2({ data, customizacao }: TemplateProps) {
             </div>
 
             {/* Info Bar */}
-            <div className="bg-gray-100 p-4 flex justify-around text-gray-700 font-medium text-xs border-b border-gray-200">
+            <div className="bg-gray-100 p-4 flex justify-around text-gray-700 font-medium text-xs border-b border-gray-200 relative z-10 mx-8 rounded-lg mb-8">
                 <div className="flex items-center gap-1"><Mail size={14} /> {data.pessoal.email}</div>
                 <div className="flex items-center gap-1"><Phone size={14} /> {data.pessoal.telefone}</div>
                 <div className="flex items-center gap-1"><MapPin size={14} /> {data.pessoal.localizacao}</div>
             </div>
 
             {/* Two Columns Body */}
-            <div className="flex flex-1 p-8 gap-8">
+            <div className="flex flex-1 px-8 pb-8 gap-8 relative z-10">
 
                 {/* Main Column */}
                 <div className={`w-2/3 flex flex-col ${spacingClass}`}>
@@ -93,41 +116,6 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                             </div>
                         </div>
                     )}
-
-                    {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
-                        <div>
-                            <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
-                                <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
-                                Certifications
-                            </h3>
-                            <div className="grid gap-3">
-                                {data.certificacoes.map((cert, i) => (
-                                    <div key={i} className="bg-gray-50 p-3 rounded-lg border-l-4" style={{ borderColor: 'var(--color-secondary)' }}>
-                                        <div className="font-bold text-gray-900">{cert.nome}</div>
-                                        <div className="text-sm text-gray-600">{cert.emissor} • {cert.ano_obtencao}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
-                        <div>
-                            <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
-                                <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
-                                Education
-                            </h3>
-                            <div className="flex flex-col gap-4">
-                                {data.educacao.map((edu, i) => (
-                                    <div key={i}>
-                                        <h4 className="font-bold text-lg">{edu.grau}</h4>
-                                        <div className="text-gray-700 font-medium">{edu.instituicao}</div>
-                                        <div className="text-sm text-gray-500">{edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
                 </div>
 
                 {/* Side Column */}
@@ -156,6 +144,35 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                     </li>
                                 ))}
                             </ul>
+                        </div>
+                    )}
+
+                    {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Education</h3>
+                            <div className="flex flex-col gap-4">
+                                {data.educacao.map((edu, i) => (
+                                    <div key={i}>
+                                        <h4 className="font-bold text-sm">{edu.grau}</h4>
+                                        <div className="text-gray-700 font-medium text-xs">{edu.instituicao}</div>
+                                        <div className="text-xs text-gray-500">{edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}</div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
+                        <div className="bg-gray-50 p-4 rounded-lg">
+                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Certifications</h3>
+                            <div className="grid gap-3">
+                                {data.certificacoes.map((cert, i) => (
+                                    <div key={i} className="border-l-4 pl-2" style={{ borderColor: 'var(--color-secondary)' }}>
+                                        <div className="font-bold text-gray-900 text-sm">{cert.nome}</div>
+                                        <div className="text-xs text-gray-600">{cert.emissor} • {cert.ano_obtencao}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>

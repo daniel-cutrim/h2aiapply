@@ -3,7 +3,7 @@ import { useCurriculoStore } from '@/store/curriculoStore';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Palette, Type, Layout } from 'lucide-react';
+import { Palette, Type, Layout, Image as ImageIcon } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
 
 export default function EditPanel() {
@@ -726,6 +726,162 @@ export default function EditPanel() {
                                         {s === 'amplo' && t('editor.design.wide')}
                                     </button>
                                 ))}
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 pt-4 border-t dark:border-slate-700">
+                            <div className="flex justify-between items-center">
+                                <h3 className="font-bold text-gray-900 dark:text-gray-100">Plano de Fundo</h3>
+                                {customizacao.imagem_fundo?.url && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-red-500 h-6 px-2 dark:hover:bg-red-900/20"
+                                        onClick={() => updateCustomizacao({ imagem_fundo: undefined })}
+                                    >
+                                        Remover
+                                    </Button>
+                                )}
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <Label className="text-xs text-gray-900 dark:text-gray-300 mb-2 block">Presets</Label>
+                                    <div className="flex gap-2 overflow-x-auto pb-2">
+                                        {['4.png', '5.png', '6.png'].map((bg) => (
+                                            <button
+                                                key={bg}
+                                                className={`w-16 h-16 rounded border-2 overflow-hidden shrink-0 transition-all ${customizacao.imagem_fundo?.url === `/backgrounds/${bg}` ? 'border-[#fe4a21]' : 'border-transparent hover:border-gray-300'}`}
+                                                onClick={() => updateCustomizacao({
+                                                    imagem_fundo: {
+                                                        url: `/backgrounds/${bg}`,
+                                                        tipo: customizacao.imagem_fundo?.tipo || 'lateral_esquerda',
+                                                        opacidade: customizacao.imagem_fundo?.opacidade ?? 0.1,
+                                                        escala: customizacao.imagem_fundo?.escala ?? 1,
+                                                        posicao_x: customizacao.imagem_fundo?.posicao_x ?? 50,
+                                                        posicao_y: customizacao.imagem_fundo?.posicao_y ?? 50,
+                                                        rotacao: customizacao.imagem_fundo?.rotacao ?? 0
+                                                    }
+                                                })}
+                                            >
+                                                <img src={`/backgrounds/${bg}`} className="w-full h-full object-cover" alt={bg} />
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label className="text-xs text-gray-900 dark:text-gray-300 mb-2 block">Upload Personalizado</Label>
+                                    <Input
+                                        type="file"
+                                        accept="image/png, image/jpeg, image/jpg, image/webp"
+                                        className="text-xs text-gray-900 bg-gray-50 dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 dark:file:bg-slate-800 dark:file:text-white"
+                                        onChange={(e) => {
+                                            const file = e.target.files?.[0];
+                                            if (file) {
+                                                const reader = new FileReader();
+                                                reader.onloadend = () => {
+                                                    updateCustomizacao({
+                                                        imagem_fundo: {
+                                                            url: reader.result as string,
+                                                            tipo: customizacao.imagem_fundo?.tipo || 'lateral_esquerda',
+                                                            opacidade: 0.1,
+                                                            escala: 1,
+                                                            posicao_x: 50,
+                                                            posicao_y: 50,
+                                                            rotacao: 0
+                                                        }
+                                                    });
+                                                };
+                                                reader.readAsDataURL(file);
+                                            }
+                                        }}
+                                    />
+                                </div>
+
+                                {customizacao.imagem_fundo && (
+                                    <>
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <Label className="text-xs text-gray-900 dark:text-gray-300">Área</Label>
+                                                <select
+                                                    className="w-full rounded text-xs border p-1 text-gray-900 bg-white dark:bg-slate-800 dark:text-gray-100 dark:border-slate-700"
+                                                    value={customizacao.imagem_fundo.tipo}
+                                                    onChange={(e) => updateCustomizacao({ imagem_fundo: { ...customizacao.imagem_fundo!, tipo: e.target.value as any } })}
+                                                >
+                                                    <option value="lateral_esquerda">Lateral Esquerda</option>
+                                                    <option value="lateral_direita">Lateral Direita</option>
+                                                    <option value="cabecalho">Cabeçalho</option>
+                                                    <option value="inteiro">Página Inteira</option>
+                                                </select>
+                                            </div>
+                                            <div className="space-y-1">
+                                                <Label className="text-xs text-gray-900 dark:text-gray-300">Opacidade ({Math.round(customizacao.imagem_fundo.opacidade * 100)}%)</Label>
+                                                <input
+                                                    type="range"
+                                                    min="0.05"
+                                                    max="1"
+                                                    step="0.05"
+                                                    className="w-full"
+                                                    value={customizacao.imagem_fundo.opacidade}
+                                                    onChange={(e) => updateCustomizacao({ imagem_fundo: { ...customizacao.imagem_fundo!, opacidade: parseFloat(e.target.value) } })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <Label className="text-xs text-gray-900 dark:text-gray-300">Posição X ({customizacao.imagem_fundo.posicao_x}%)</Label>
+                                                <input
+                                                    type="range"
+                                                    min="0"
+                                                    max="100"
+                                                    className="w-full"
+                                                    value={customizacao.imagem_fundo.posicao_x ?? 50}
+                                                    onChange={(e) => updateCustomizacao({ imagem_fundo: { ...customizacao.imagem_fundo!, posicao_x: parseInt(e.target.value) } })}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <Label className="text-xs text-gray-900 dark:text-gray-300">Posição Y ({customizacao.imagem_fundo.posicao_y}%)</Label>
+                                                <input
+                                                    type="range"
+                                                    min="0"
+                                                    max="100"
+                                                    className="w-full"
+                                                    value={customizacao.imagem_fundo.posicao_y ?? 50}
+                                                    onChange={(e) => updateCustomizacao({ imagem_fundo: { ...customizacao.imagem_fundo!, posicao_y: parseInt(e.target.value) } })}
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid grid-cols-2 gap-4">
+                                            <div className="space-y-1">
+                                                <Label className="text-xs text-gray-900 dark:text-gray-300">Zoom ({customizacao.imagem_fundo.escala}x)</Label>
+                                                <input
+                                                    type="range"
+                                                    min="0.5"
+                                                    max="3"
+                                                    step="0.1"
+                                                    className="w-full"
+                                                    value={customizacao.imagem_fundo.escala ?? 1}
+                                                    onChange={(e) => updateCustomizacao({ imagem_fundo: { ...customizacao.imagem_fundo!, escala: parseFloat(e.target.value) } })}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <Label className="text-xs text-gray-900 dark:text-gray-300">Rotação ({customizacao.imagem_fundo.rotacao}°)</Label>
+                                                <input
+                                                    type="range"
+                                                    min="-180"
+                                                    max="180"
+                                                    step="5"
+                                                    className="w-full"
+                                                    value={customizacao.imagem_fundo.rotacao ?? 0}
+                                                    onChange={(e) => updateCustomizacao({ imagem_fundo: { ...customizacao.imagem_fundo!, rotacao: parseInt(e.target.value) } })}
+                                                />
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>

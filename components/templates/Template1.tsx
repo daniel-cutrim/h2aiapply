@@ -53,7 +53,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
             `}</style>
 
             <div
-                className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto flex overflow-hidden text-sm"
+                className="w-[210mm] min-h-[297mm] bg-white shadow-lg mx-auto flex overflow-hidden text-sm relative"
                 style={{
                     ...containerStyle,
                     printColorAdjust: 'exact',
@@ -61,11 +61,36 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                 }}
                 id="resume-content"
             >
+                {/* Background Image Layer */}
+                {customizacao.imagem_fundo?.url && (
+                    <div
+                        className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
+                        style={{
+                            clipPath: customizacao.imagem_fundo.tipo === 'lateral_esquerda' ? 'polygon(0 0, 33.33% 0, 33.33% 100%, 0 100%)' :
+                                customizacao.imagem_fundo.tipo === 'cabecalho' ? 'polygon(0 0, 100% 0, 100% 150px, 0 150px)' :
+                                    'none'
+                        }}
+                    >
+                        <img
+                            src={customizacao.imagem_fundo.url}
+                            alt="Background"
+                            className="absolute object-cover w-full h-full"
+                            style={{
+                                opacity: customizacao.imagem_fundo.opacidade,
+                                transform: `translate(${customizacao.imagem_fundo.posicao_x ? customizacao.imagem_fundo.posicao_x - 50 : 0}%, ${customizacao.imagem_fundo.posicao_y ? customizacao.imagem_fundo.posicao_y - 50 : 0}%) scale(${customizacao.imagem_fundo.escala || 1}) rotate(${customizacao.imagem_fundo.rotacao || 0}deg)`,
+                                transformOrigin: 'center center'
+                            }}
+                        />
+                    </div>
+                )}
+
                 {/* Left Sidebar */}
                 <div
-                    className={`w-1/3 text-white p-6 flex flex-col ${sidebarGapClass}`}
+                    className={`w-1/3 text-white p-6 flex flex-col ${sidebarGapClass} relative z-10`}
                     style={{
-                        backgroundColor: 'var(--color-primary)',
+                        backgroundColor: customizacao.imagem_fundo?.tipo === 'lateral_esquerda' || customizacao.imagem_fundo?.tipo === 'inteiro'
+                            ? `rgba(${parseInt(cores.primaria.slice(1, 3), 16)}, ${parseInt(cores.primaria.slice(3, 5), 16)}, ${parseInt(cores.primaria.slice(5, 7), 16)}, 0.85)`
+                            : 'var(--color-primary)',
                         color: 'white'
                     }}
                 >
@@ -127,11 +152,42 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                                 </div>
                             </div>
                         )}
+
+                        {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
+                            <div className="mt-4">
+                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Education</h2>
+                                <div className="flex flex-col gap-3 text-left">
+                                    {data.educacao.map((edu, i) => (
+                                        <div key={i}>
+                                            <div className="font-bold">{edu.grau}</div>
+                                            <div className="text-sm opacity-90">{edu.instituicao}</div>
+                                            <div className="text-xs opacity-75">{edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}</div>
+                                            {edu.area_estudo && <div className="text-xs opacity-75">{edu.area_estudo}</div>}
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
+                            <div className="mt-4">
+                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Certifications</h2>
+                                <div className="flex flex-col gap-2 text-left">
+                                    {data.certificacoes.map((cert, i) => (
+                                        <div key={i} className="text-sm">
+                                            <div className="font-bold">{cert.nome}</div>
+                                            <div className="opacity-80">{cert.emissor}</div>
+                                            <div className="text-xs font-semibold">{cert.ano_obtencao}</div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 {/* Main Content */}
-                <div className="w-2/3 p-8 flex flex-col" style={{ color: 'var(--color-text)' }}>
+                <div className="w-2/3 p-8 flex flex-col relative z-20" style={{ color: 'var(--color-text)' }}>
                     <div className={mbClass}>
                         <h1 className="text-3xl font-bold uppercase tracking-wider leading-tight" style={{ color: 'var(--color-primary)' }}>
                             {data.pessoal.nome} <span style={{ color: 'var(--color-secondary)' }}>{data.pessoal.sobrenome}</span>
@@ -172,43 +228,6 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                                         ) : (
                                             <p className="text-sm mb-2 whitespace-pre-line text-justify">{exp.descricao}</p>
                                         )}
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
-                        <div className={`${mbClass} flex flex-col ${gapClass}`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Certifications</h3>
-                            <div className="flex flex-col gap-2">
-                                {data.certificacoes.map((cert, i) => (
-                                    <div key={i} className="flex justify-between text-sm">
-                                        <div>
-                                            <span className="font-bold">{cert.nome}</span>
-                                            <span className="opacity-80"> - {cert.emissor}</span>
-                                        </div>
-                                        <div className="text-xs font-semibold whitespace-nowrap">{cert.ano_obtencao}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
-                        <div className={`${mbClass} flex flex-col ${gapClass}`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Education</h3>
-                            <div className="flex flex-col gap-3">
-                                {data.educacao.map((edu, i) => (
-                                    <div key={i}>
-                                        <div className="flex justify-between">
-                                            <h4 className="font-bold">{edu.grau}</h4>
-                                            <span className="text-xs font-semibold bg-gray-100 px-2 py-0.5 rounded text-black whitespace-nowrap">
-                                                {edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}
-                                            </span>
-                                        </div>
-                                        <div className="text-sm opacity-90">{edu.instituicao}</div>
-                                        {edu.area_estudo && <div className="text-xs opacity-75">{edu.area_estudo}</div>}
                                     </div>
                                 ))}
                             </div>
