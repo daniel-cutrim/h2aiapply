@@ -17,7 +17,7 @@ interface CurriculoEditorProps {
 }
 
 export default function CurriculoEditor({ id, token, visual, lang, jobId, alunoId }: CurriculoEditorProps) {
-    const { fetchCurriculo, isLoading, error, curriculo } = useCurriculoStore();
+    const { fetchCurriculo, isLoading, error, curriculo, setAlunoId } = useCurriculoStore();
     const { setTheme, setLanguage } = useUiStore();
 
     // Init UI store on mount
@@ -25,6 +25,11 @@ export default function CurriculoEditor({ id, token, visual, lang, jobId, alunoI
         if (visual) setTheme(visual);
         if (lang) setLanguage(lang);
     }, [visual, lang, setTheme, setLanguage]);
+
+    // Set alunoId in store for webhook payload
+    useEffect(() => {
+        setAlunoId(alunoId || null);
+    }, [alunoId, setAlunoId]);
 
     useEffect(() => {
         fetchCurriculo(id, token);

@@ -7,6 +7,7 @@ interface CurriculoState {
     isLoading: boolean;
     isSaving: boolean;
     error: string | null;
+    alunoId: string | null; // Track alunoId for webhook
 
     // Actions
     fetchCurriculo: (id: string, token: string) => Promise<void>;
@@ -14,16 +15,26 @@ interface CurriculoState {
     updateCustomizacao: (customizacao: Partial<Customizacao>) => void;
     setTemplate: (templateId: string) => void;
     saveCurriculo: () => Promise<void>; // Explicit save or triggered by debounce
+    setAlunoId: (alunoId: string | null) => void;
+    scheduleExportWebhook: () => void;
 }
 
 // Debounce timer reference
 let saveTimeout: NodeJS.Timeout | null = null;
+
+// Export webhook timer reference (2 minutes)
+let exportTimerRef: NodeJS.Timeout | null = null;
 
 export const useCurriculoStore = create<CurriculoState>((set, get) => ({
     curriculo: null,
     isLoading: false,
     isSaving: false,
     error: null,
+    alunoId: null,
+
+    setAlunoId: (alunoId) => {
+        set({ alunoId });
+    },
 
     fetchCurriculo: async (id: string, token: string) => {
         set({ isLoading: true, error: null });
@@ -55,6 +66,7 @@ export const useCurriculoStore = create<CurriculoState>((set, get) => ({
 
         set({ curriculo: updated });
         get().saveCurriculo();
+        get().scheduleExportWebhook(); // Schedule export webhook
     },
 
     updateCustomizacao: (newCustom) => {
@@ -68,6 +80,7 @@ export const useCurriculoStore = create<CurriculoState>((set, get) => ({
 
         set({ curriculo: updated });
         get().saveCurriculo();
+        get().scheduleExportWebhook(); // Schedule export webhook
     },
 
     setTemplate: (templateId) => {
@@ -76,6 +89,7 @@ export const useCurriculoStore = create<CurriculoState>((set, get) => ({
 
         set({ curriculo: { ...current, template_id: templateId } });
         get().saveCurriculo();
+        get().scheduleExportWebhook(); // Schedule export webhook
     },
 
     saveCurriculo: async () => {
@@ -110,5 +124,42 @@ export const useCurriculoStore = create<CurriculoState>((set, get) => ({
                 set({ isSaving: false });
             }
         }, 2000); // 2 second debounce
+    },
+
+    scheduleExportWebhook: () => {
+        // Clear existing export timer
+        if (exportTimerRef) {
+            clearTimeout(exportTimerRef);
+        }
+
+        // Set new 2-minute timer
+        exportTimerRef = setTimeout(async () => {
+            const { curriculo, alunoId } = get();
+            if (!curriculo) return;
+
+            // Trigger export webhook
+            const webhookUrl = process.env.NEXT_PUBLIC_EXPORT_WEBHOOK_URL;
+            if (webhookUrl) {
+                try {
+                    const payload: any = { curriculo_id: curriculo.id };
+                    if (alunoId) {
+                        payload.aluno_id = alunoId;
+                    }
+
+                    await fetch(webhookUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    console.log('✅ Auto-export webhook triggered after 2 minutes of inactivity');
+                } catch (err) {
+                    console.error('❌ Auto-export webhook failed:', err);
+                }
+            } else {
+                console.warn('⚠️ NEXT_PUBLIC_EXPORT_WEBHOOK_URL not configured');
+            }
+        }, 120000); // 2 minutes = 120,000ms
     }
 }));
+
