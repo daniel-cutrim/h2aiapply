@@ -8,7 +8,12 @@
             "texto": "#0f172a"
         },
         "fonte": "sans-serif",
-        "espacamento": "normal"
+        "espacamento": "normal",
+        "imagem_fundo": {
+            "url": "https://images.unsplash.com/photo-1557683316-973673baf926?auto=format&fit=crop&w=800",
+            "tipo": "lateral_esquerda",
+            "opacidade": 0.5
+        }
     },
     "dados": {
         "pessoal": {
@@ -40,14 +45,28 @@
                 "nivel": "Advanced"
             }
         ],
-        "educacao": "Bacharelado em Ciência da Computação\nUniversidade Federal - 2018 a 2022",
-        "certificacoes": "AWS Certified Solutions Architect - Associate (2023)\nMeta Frontend Developer Professional Certificate (2022)",
+        "educacao": [
+            {
+                "grau": "Bacharelado em Ciência da Computação",
+                "instituicao": "Universidade Federal",
+                "ano_inicio": "2018",
+                "ano_fim": "2022"
+            }
+        ],
+        "certificacoes": [
+            {
+                "nome": "AWS Certified Solutions Architect - Associate",
+                "emissor": "Amazon Web Services",
+                "ano_obtencao": "2023"
+            }
+        ],
         "experiencias": [
             {
                 "id": "1",
                 "empresa": "Tech Solutions",
                 "cargo": "Senior Frontend Engineer",
                 "periodo": "2022 - Atual",
+                "ano_inicio": "2022",
                 "formato": "topicos",
                 "descricao": "• Liderança técnica de equipe com 5 desenvolvedores.\n• Implementação de Design System reduzindo tempo de desenvolvimento em 30%.\n• Migração de legado para Next.js."
             },
@@ -56,6 +75,8 @@
                 "empresa": "Startup Inovadora",
                 "cargo": "Full Stack Developer",
                 "periodo": "2020 - 2022",
+                "ano_inicio": "2020",
+                "ano_fim": "2022",
                 "formato": "texto",
                 "descricao": "Desenvolvimento de funcionalidades de ponta a ponta, desde a modelagem de banco de dados até a interface do usuário. Responsável pela integração com APIs de pagamentos."
             }

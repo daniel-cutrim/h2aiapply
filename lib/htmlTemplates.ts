@@ -63,6 +63,13 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
         ? `rgba(${parseInt(cores.primaria.slice(1, 3), 16)}, ${parseInt(cores.primaria.slice(3, 5), 16)}, ${parseInt(cores.primaria.slice(5, 7), 16)}, 0.85)`
         : cores.primaria;
 
+    // Safety checks for arrays
+    const safeSkills = Array.isArray(skills) ? skills : [];
+    const safeIdiomas = Array.isArray(idiomas) ? idiomas : [];
+    const safeEducacao = Array.isArray(educacao) ? educacao : [];
+    const safeCertificacoes = Array.isArray(certificacoes) ? certificacoes : [];
+    const safeExperiencias = Array.isArray(experiencias) ? experiencias : [];
+
     const backgroundHtml = generateBackgroundHtml({
         ...custom,
         imagem_fundo: custom.imagem_fundo?.tipo === 'lateral_esquerda'
@@ -70,18 +77,18 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
             : custom.imagem_fundo
     });
 
-    const skillsHtml = skills.filter(Boolean).map(s =>
+    const skillsHtml = safeSkills.filter(Boolean).map(s =>
         `<span style="background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px; font-size: 12px; margin: 2px;">${escapeHtml(s)}</span>`
     ).join('');
 
-    const idiomasHtml = idiomas.filter(i => i.idioma && i.nivel).map(i =>
+    const idiomasHtml = safeIdiomas.filter(i => i.idioma && i.nivel).map(i =>
         `<div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
             <span>${escapeHtml(i.idioma)}</span>
             <span style="opacity: 0.8;">${escapeHtml(i.nivel)}</span>
         </div>`
     ).join('');
 
-    const educacaoSidebarHtml = educacao.map(edu => `
+    const educacaoSidebarHtml = safeEducacao.map(edu => `
         <div style="margin-bottom: 8px;">
             <div style="font-weight: bold;">${escapeHtml(edu.grau)}</div>
             <div style="font-size: 12px; opacity: 0.9;">${escapeHtml(edu.instituicao)}</div>
@@ -89,7 +96,7 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
         </div>
     `).join('');
 
-    const certificacoesSidebarHtml = certificacoes.map(cert => `
+    const certificacoesSidebarHtml = safeCertificacoes.map(cert => `
         <div style="margin-bottom: 8px; font-size: 13px;">
             <div style="font-weight: bold;">${escapeHtml(cert.nome)}</div>
             <div style="opacity: 0.8;">${escapeHtml(cert.emissor)}</div>
@@ -97,7 +104,7 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
         </div>
     `).join('');
 
-    const experienciasHtml = experiencias.map(exp => `
+    const experienciasHtml = safeExperiencias.map(exp => `
         <div style="margin-bottom: 16px;">
             <div style="display: flex; justify-content: space-between; align-items: baseline;">
                 <h4 style="font-weight: bold; margin: 0;">${escapeHtml(exp.cargo)}</h4>
@@ -138,28 +145,28 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
                     </div>
                 </div>
                 
-                ${secoes_visiveis.skills && skills.length > 0 ? `
+                ${secoes_visiveis.skills && safeSkills.length > 0 ? `
                 <div>
                     <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Habilidades</h2>
                     <div style="display: flex; flex-wrap: wrap; gap: 4px;">${skillsHtml}</div>
                 </div>
                 ` : ''}
                 
-                ${secoes_visiveis.idiomas && idiomas.length > 0 ? `
+                ${secoes_visiveis.idiomas && safeIdiomas.length > 0 ? `
                 <div>
                     <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Idiomas</h2>
                     ${idiomasHtml}
                 </div>
                 ` : ''}
 
-                ${secoes_visiveis.educacao && educacao.length > 0 ? `
+                ${secoes_visiveis.educacao && safeEducacao.length > 0 ? `
                 <div>
                     <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Educação</h2>
                     ${educacaoSidebarHtml}
                 </div>
                 ` : ''}
 
-                ${secoes_visiveis.certificacoes && certificacoes.length > 0 ? `
+                ${secoes_visiveis.certificacoes && safeCertificacoes.length > 0 ? `
                 <div>
                     <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Certificações</h2>
                     ${certificacoesSidebarHtml}
@@ -183,7 +190,7 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
                 </div>
                 ` : ''}
                 
-                ${secoes_visiveis.experiencias && experiencias.length > 0 ? `
+                ${secoes_visiveis.experiencias && safeExperiencias.length > 0 ? `
                 <div style="margin-bottom: 24px;">
                     <h3 style="font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid ${cores.secundaria}; padding-bottom: 4px; margin-bottom: 12px;">Experiência Profissional</h3>
                     ${experienciasHtml}
@@ -208,6 +215,13 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
             ? { ...custom.imagem_fundo, tipo: 'lateral_direita' }
             : custom.imagem_fundo
     });
+
+    // Safety checks
+    const safeSkills = Array.isArray(skills) ? skills : [];
+    const safeIdiomas = Array.isArray(idiomas) ? idiomas : [];
+    const safeEducacao = Array.isArray(educacao) ? educacao : [];
+    const safeCertificacoes = Array.isArray(certificacoes) ? certificacoes : [];
+    const safeExperiencias = Array.isArray(experiencias) ? experiencias : [];
 
     return `
         <div style="width: 210mm; min-height: 297mm; font-family: ${custom.fonte}; font-size: 14px; color: ${cores.texto}; background: white; position: relative; overflow: hidden;">
@@ -240,10 +254,10 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.experiencias && experiencias.length > 0 ? `
+                    ${secoes_visiveis.experiencias && safeExperiencias.length > 0 ? `
                     <div style="margin-bottom: 24px;">
                         <h3 style="font-size: 14px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 12px;">Experiência</h3>
-                        ${experiencias.map(exp => `
+                        ${safeExperiencias.map(exp => `
                             <div style="margin-bottom: 16px; padding-left: 12px; border-left: 3px solid ${cores.secundaria};">
                                 <h4 style="font-weight: bold; margin: 0;">${escapeHtml(exp.cargo)}</h4>
                                 <div style="color: ${cores.secundaria}; font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px;">
@@ -267,25 +281,25 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                 <!-- Side Column (Right) -->
                 <div style="flex: 1; background: transparent; padding-top: 0;">
                     <div style="background: #f8fafc; padding: 16px; border-radius: 8px;">
-                        ${secoes_visiveis.skills && skills.length > 0 ? `
+                        ${secoes_visiveis.skills && safeSkills.length > 0 ? `
                         <div style="margin-bottom: 20px;">
                             <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Habilidades</h3>
-                            ${skills.filter(Boolean).map(s => `<div style="font-size: 12px; margin-bottom: 4px; background: white; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; display: inline-block; margin: 2px;">${escapeHtml(s)}</div>`).join('')}
+                            ${safeSkills.filter(Boolean).map(s => `<div style="font-size: 12px; margin-bottom: 4px; background: white; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; display: inline-block; margin: 2px;">${escapeHtml(s)}</div>`).join('')}
                         </div>
                         ` : ''}
                         
-                        ${secoes_visiveis.idiomas && idiomas.length > 0 ? `
+                        ${secoes_visiveis.idiomas && safeIdiomas.length > 0 ? `
                         <div style="margin-bottom: 20px;">
                             <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Idiomas</h3>
-                            ${idiomas.filter(i => i.idioma).map(i => `<div style="font-size: 12px; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;"><b>${escapeHtml(i.idioma)}</b> <span style="float:right">${escapeHtml(i.nivel)}</span></div>`).join('')}
+                            ${safeIdiomas.filter(i => i.idioma).map(i => `<div style="font-size: 12px; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;"><b>${escapeHtml(i.idioma)}</b> <span style="float:right">${escapeHtml(i.nivel)}</span></div>`).join('')}
                         </div>
                         ` : ''}
                         
-                        ${secoes_visiveis.educacao && educacao && educacao.length > 0 ? `
+                        ${secoes_visiveis.educacao && safeEducacao && safeEducacao.length > 0 ? `
                         <div style="margin-bottom: 20px;">
                             <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Educação</h3>
                             <div style="display: flex; flex-direction: column; gap: 8px;">
-                                ${educacao.map(edu => `
+                                ${safeEducacao.map(edu => `
                                     <div>
                                         <h4 style="font-weight: bold; font-size: 13px; margin: 0;">${escapeHtml(edu.grau)}</h4>
                                         <div style="font-size: 12px; font-weight: 500;">${escapeHtml(edu.instituicao)}</div>
@@ -296,11 +310,11 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                         </div>
                         ` : ''}
                         
-                        ${secoes_visiveis.certificacoes && certificacoes && certificacoes.length > 0 ? `
+                        ${secoes_visiveis.certificacoes && safeCertificacoes && safeCertificacoes.length > 0 ? `
                         <div>
                             <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Certificações</h3>
                             <div style="display: flex; flex-direction: column; gap: 6px;">
-                                ${certificacoes.map(cert => `
+                                ${safeCertificacoes.map(cert => `
                                     <div style="padding-left: 8px; border-left: 2px solid ${cores.secundaria};">
                                         <div style="font-weight: bold; font-size: 12px;">${escapeHtml(cert.nome)}</div>
                                         <div style="font-size: 11px; opacity: 0.8;">${escapeHtml(cert.emissor)} • ${escapeHtml(cert.ano_obtencao)}</div>
@@ -322,6 +336,13 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
     const { modelo_foto, secoes_visiveis } = custom;
 
     const photoRadius = modelo_foto === 'circular' ? 'border-radius: 50%;' : 'border-radius: 8px;';
+
+    // Safety checks
+    const safeSkills = Array.isArray(skills) ? skills : [];
+    const safeIdiomas = Array.isArray(idiomas) ? idiomas : [];
+    const safeEducacao = Array.isArray(educacao) ? educacao : [];
+    const safeCertificacoes = Array.isArray(certificacoes) ? certificacoes : [];
+    const safeExperiencias = Array.isArray(experiencias) ? experiencias : [];
 
     // Check if background image needs clip for template 3 left sidebar (25% width approx)
     let backgroundHtml = '';
@@ -362,25 +383,25 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
             <div style="display: flex; gap: 48px; position: relative; z-index: 10;">
                 <!-- Left Column -->
                 <div style="width: 25%;">
-                    ${secoes_visiveis.skills && skills.length > 0 ? `
+                    ${secoes_visiveis.skills && safeSkills.length > 0 ? `
                     <div style="margin-bottom: 24px;">
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Habilidades</h3>
-                        ${skills.filter(Boolean).map(s => `<div style="font-size: 12px; margin-bottom: 6px;">${escapeHtml(s)}</div>`).join('')}
+                        ${safeSkills.filter(Boolean).map(s => `<div style="font-size: 12px; margin-bottom: 6px;">${escapeHtml(s)}</div>`).join('')}
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.idiomas && idiomas.length > 0 ? `
+                    ${secoes_visiveis.idiomas && safeIdiomas.length > 0 ? `
                     <div style="margin-bottom: 24px;">
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Idiomas</h3>
-                        ${idiomas.filter(i => i.idioma).map(i => `<div style="font-size: 12px; margin-bottom: 6px;">${escapeHtml(i.idioma)} <span style="opacity: 0.6;">(${escapeHtml(i.nivel)})</span></div>`).join('')}
+                        ${safeIdiomas.filter(i => i.idioma).map(i => `<div style="font-size: 12px; margin-bottom: 6px;">${escapeHtml(i.idioma)} <span style="opacity: 0.6;">(${escapeHtml(i.nivel)})</span></div>`).join('')}
                     </div>
                     ` : ''}
                     
-                     ${secoes_visiveis.educacao && educacao && educacao.length > 0 ? `
+                     ${secoes_visiveis.educacao && safeEducacao && safeEducacao.length > 0 ? `
                     <div style="margin-bottom: 24px;">
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Educação</h3>
                         <div style="display: flex; flex-direction: column; gap: 12px;">
-                            ${educacao.map(edu => `
+                            ${safeEducacao.map(edu => `
                                 <div>
                                     <div style="font-weight: bold; font-size: 12px; margin: 0;">${escapeHtml(edu.grau)}</div>
                                     <div style="font-size: 11px; text-transform: uppercase; opacity: 0.8;">${escapeHtml(edu.instituicao)}</div>
@@ -391,11 +412,11 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.certificacoes && certificacoes && certificacoes.length > 0 ? `
+                    ${secoes_visiveis.certificacoes && safeCertificacoes && safeCertificacoes.length > 0 ? `
                     <div>
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Certificações</h3>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
-                            ${certificacoes.map(cert => `
+                            ${safeCertificacoes.map(cert => `
                                 <div>
                                     <div style="display: flex; justify-content: space-between; align-items: baseline;">
                                         <span style="font-weight: bold; font-size: 13px;">${escapeHtml(cert.nome)}</span>
@@ -418,10 +439,10 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
                     </div>
                     ` : ''}
                     
-                    ${secoes_visiveis.experiencias && experiencias.length > 0 ? `
+                    ${secoes_visiveis.experiencias && safeExperiencias.length > 0 ? `
                     <div style="margin-bottom: 24px;">
                         <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Experiência</h3>
-                        ${experiencias.map(exp => `
+                        ${safeExperiencias.map(exp => `
                             <div style="margin-bottom: 16px;">
                                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
                                     <strong>${escapeHtml(exp.cargo)}</strong>
