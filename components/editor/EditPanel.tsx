@@ -599,18 +599,64 @@ export default function EditPanel() {
                         {/* Idiomas */}
                         <div className="space-y-4 pt-4 border-t dark:border-slate-700">
                             <h3 className="font-bold text-gray-900 dark:text-gray-100">{t('editor.languages.title')}</h3>
+                            <div className="flex justify-end items-center mb-2">
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    className="text-black border-black hover:bg-gray-100 dark:text-white dark:border-gray-500 dark:bg-transparent dark:hover:bg-slate-800"
+                                    onClick={() => {
+                                        const newIdiomas = [...(dados.idiomas || [])];
+                                        newIdiomas.push({ idioma: '', nivel: '' });
+                                        updateDados({ idiomas: newIdiomas });
+                                    }}
+                                >
+                                    Adicionar Idioma
+                                </Button>
+                            </div>
+
                             <div className="grid gap-4">
                                 {(dados.idiomas || []).map((lang, index) => (
-                                    <div key={lang.idioma} className="flex items-center justify-between border p-3 rounded-lg bg-gray-50 dark:bg-slate-800 dark:border-slate-700">
-                                        <span className="font-medium text-black dark:text-gray-200">{lang.idioma}</span>
-                                        <div className="w-[180px]">
+                                    <div key={index} className="flex items-center gap-3 border p-3 rounded-lg bg-gray-50 dark:bg-slate-800 dark:border-slate-700 group relative">
+                                        <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-6 w-6 text-red-500 hover:text-red-700 dark:hover:bg-red-900/20"
+                                                onClick={() => {
+                                                    const newIdiomas = [...(dados.idiomas || [])];
+                                                    newIdiomas.splice(index, 1);
+                                                    updateDados({ idiomas: newIdiomas });
+                                                }}
+                                                title="Remover idioma"
+                                            >
+                                                <span className="sr-only">Remover</span>
+                                                &times;
+                                            </Button>
+                                        </div>
+
+                                        <div className="flex-1 space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">Idioma</Label>
+                                            <Input
+                                                list="common-languages"
+                                                className="text-gray-900 bg-white dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                value={lang.idioma}
+                                                placeholder="Ex: Inglês"
+                                                onChange={(e) => {
+                                                    const newIdiomas = [...(dados.idiomas || [])];
+                                                    newIdiomas[index] = { ...lang, idioma: e.target.value };
+                                                    updateDados({ idiomas: newIdiomas });
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="w-[180px] space-y-1">
+                                            <Label className="text-xs text-gray-900 dark:text-gray-300">Nível</Label>
                                             <select
-                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600"
+                                                className="w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-sm text-gray-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-950 dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600 h-10"
                                                 value={lang.nivel}
                                                 onChange={(e) => {
                                                     const newIdiomas = [...(dados.idiomas || [])];
-                                                    if (!newIdiomas[index]) return;
-                                                    newIdiomas[index] = { ...newIdiomas[index], nivel: e.target.value as any };
+                                                    newIdiomas[index] = { ...lang, nivel: e.target.value as any };
                                                     updateDados({ idiomas: newIdiomas });
                                                 }}
                                             >
@@ -624,20 +670,24 @@ export default function EditPanel() {
                                         </div>
                                     </div>
                                 ))}
+
+                                <datalist id="common-languages">
+                                    <option value="Português" />
+                                    <option value="Inglês" />
+                                    <option value="Espanhol" />
+                                    <option value="Francês" />
+                                    <option value="Alemão" />
+                                    <option value="Italiano" />
+                                    <option value="Mandarim" />
+                                    <option value="Japonês" />
+                                    <option value="Russo" />
+                                    <option value="Coreano" />
+                                </datalist>
+
                                 {(!dados.idiomas || dados.idiomas.length === 0) && (
-                                    <Button
-                                        variant="outline"
-                                        className="dark:text-white dark:border-gray-500 hover:bg-gray-100 dark:hover:bg-slate-800"
-                                        onClick={() => updateDados({
-                                            idiomas: [
-                                                { idioma: 'Portuguese', nivel: '' },
-                                                { idioma: 'English', nivel: '' },
-                                                { idioma: 'Spanish', nivel: '' }
-                                            ]
-                                        })}
-                                    >
-                                        {t('editor.languages.init')}
-                                    </Button>
+                                    <div className="text-center py-4 text-sm text-gray-500 dark:text-gray-400 border border-dashed rounded-lg">
+                                        Nenhum idioma adicionado.
+                                    </div>
                                 )}
                             </div>
                         </div>
