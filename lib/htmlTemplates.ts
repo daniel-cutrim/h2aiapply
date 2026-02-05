@@ -136,7 +136,7 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
                 </div>
                 
                 <div>
-                    <h2 style="font-size: 16px; font-weight: bold; margin-bottom: 12px;">Contato</h2>
+                    <h2 style="font-size: 16px; font-weight: bold; margin-bottom: 12px;">Contact</h2>
                     <div style="font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
                         <div>📧 ${escapeHtml(pessoal.email)}</div>
                         <div>📱 ${escapeHtml(pessoal.telefone)}</div>
@@ -147,28 +147,28 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
                 
                 ${secoes_visiveis.skills && safeSkills.length > 0 ? `
                 <div>
-                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Habilidades</h2>
+                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Skills</h2>
                     <div style="display: flex; flex-wrap: wrap; gap: 4px;">${skillsHtml}</div>
                 </div>
                 ` : ''}
                 
                 ${secoes_visiveis.idiomas && safeIdiomas.length > 0 ? `
                 <div>
-                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Idiomas</h2>
+                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Languages</h2>
                     ${idiomasHtml}
                 </div>
                 ` : ''}
 
                 ${secoes_visiveis.educacao && safeEducacao.length > 0 ? `
                 <div>
-                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Educação</h2>
+                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Education</h2>
                     ${educacaoSidebarHtml}
                 </div>
                 ` : ''}
 
                 ${secoes_visiveis.certificacoes && safeCertificacoes.length > 0 ? `
                 <div>
-                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Certificações</h2>
+                    <h2 style="font-size: 16px; font-weight: bold; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 4px; margin-bottom: 8px;">Certifications</h2>
                     ${certificacoesSidebarHtml}
                 </div>
                 ` : ''}
@@ -185,14 +185,14 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
                 
                 ${secoes_visiveis.perfil && resumo ? `
                 <div style="margin-bottom: 24px;">
-                    <h3 style="font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid ${cores.secundaria}; padding-bottom: 4px; margin-bottom: 8px;">Resumo</h3>
+                    <h3 style="font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid ${cores.secundaria}; padding-bottom: 4px; margin-bottom: 8px;">Profile</h3>
                     <p style="text-align: justify; line-height: 1.6;">${nl2br(resumo)}</p>
                 </div>
                 ` : ''}
                 
                 ${secoes_visiveis.experiencias && safeExperiencias.length > 0 ? `
                 <div style="margin-bottom: 24px;">
-                    <h3 style="font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid ${cores.secundaria}; padding-bottom: 4px; margin-bottom: 12px;">Experiência Profissional</h3>
+                    <h3 style="font-size: 16px; font-weight: bold; text-transform: uppercase; border-bottom: 2px solid ${cores.secundaria}; padding-bottom: 4px; margin-bottom: 12px;">Work Experience</h3>
                     ${experienciasHtml}
                 </div>
                 ` : ''}
@@ -249,14 +249,14 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                 <div style="flex: 2;">
                     ${secoes_visiveis.perfil && resumo ? `
                     <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 14px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Resumo Profissional</h3>
+                        <h3 style="font-size: 14px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Profile</h3>
                         <p style="line-height: 1.6;">${nl2br(resumo)}</p>
                     </div>
                     ` : ''}
                     
                     ${secoes_visiveis.experiencias && safeExperiencias.length > 0 ? `
                     <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 14px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 12px;">Experiência</h3>
+                        <h3 style="font-size: 14px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 12px;">Work Experience</h3>
                         ${safeExperiencias.map(exp => `
                             <div style="margin-bottom: 16px; padding-left: 12px; border-left: 3px solid ${cores.secundaria};">
                                 <h4 style="font-weight: bold; margin: 0;">${escapeHtml(exp.cargo)}</h4>
@@ -283,21 +283,21 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                     <div style="background: #f8fafc; padding: 16px; border-radius: 8px;">
                         ${secoes_visiveis.skills && safeSkills.length > 0 ? `
                         <div style="margin-bottom: 20px;">
-                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Habilidades</h3>
+                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Skills</h3>
                             ${safeSkills.filter(Boolean).map(s => `<div style="font-size: 12px; margin-bottom: 4px; background: white; padding: 2px 6px; border-radius: 4px; border: 1px solid #e2e8f0; display: inline-block; margin: 2px;">${escapeHtml(s)}</div>`).join('')}
                         </div>
                         ` : ''}
                         
                         ${secoes_visiveis.idiomas && safeIdiomas.length > 0 ? `
                         <div style="margin-bottom: 20px;">
-                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Idiomas</h3>
+                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Languages</h3>
                             ${safeIdiomas.filter(i => i.idioma).map(i => `<div style="font-size: 12px; margin-bottom: 4px; border-bottom: 1px solid #eee; padding-bottom: 2px;"><b>${escapeHtml(i.idioma)}</b> <span style="float:right">${escapeHtml(i.nivel)}</span></div>`).join('')}
                         </div>
                         ` : ''}
                         
                         ${secoes_visiveis.educacao && safeEducacao && safeEducacao.length > 0 ? `
                         <div style="margin-bottom: 20px;">
-                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Educação</h3>
+                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Education</h3>
                             <div style="display: flex; flex-direction: column; gap: 8px;">
                                 ${safeEducacao.map(edu => `
                                     <div>
@@ -312,7 +312,7 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
                         
                         ${secoes_visiveis.certificacoes && safeCertificacoes && safeCertificacoes.length > 0 ? `
                         <div>
-                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Certificações</h3>
+                            <h3 style="font-size: 12px; font-weight: bold; text-transform: uppercase; color: ${cores.primaria}; margin-bottom: 8px;">Certifications</h3>
                             <div style="display: flex; flex-direction: column; gap: 6px;">
                                 ${safeCertificacoes.map(cert => `
                                     <div style="padding-left: 8px; border-left: 2px solid ${cores.secundaria};">
@@ -385,21 +385,21 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
                 <div style="width: 25%;">
                     ${secoes_visiveis.skills && safeSkills.length > 0 ? `
                     <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Habilidades</h3>
+                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Skills</h3>
                         ${safeSkills.filter(Boolean).map(s => `<div style="font-size: 12px; margin-bottom: 6px;">${escapeHtml(s)}</div>`).join('')}
                     </div>
                     ` : ''}
                     
                     ${secoes_visiveis.idiomas && safeIdiomas.length > 0 ? `
                     <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Idiomas</h3>
+                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Languages</h3>
                         ${safeIdiomas.filter(i => i.idioma).map(i => `<div style="font-size: 12px; margin-bottom: 6px;">${escapeHtml(i.idioma)} <span style="opacity: 0.6;">(${escapeHtml(i.nivel)})</span></div>`).join('')}
                     </div>
                     ` : ''}
                     
                      ${secoes_visiveis.educacao && safeEducacao && safeEducacao.length > 0 ? `
                     <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Educação</h3>
+                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Education</h3>
                         <div style="display: flex; flex-direction: column; gap: 12px;">
                             ${safeEducacao.map(edu => `
                                 <div>
@@ -414,7 +414,7 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
                     
                     ${secoes_visiveis.certificacoes && safeCertificacoes && safeCertificacoes.length > 0 ? `
                     <div>
-                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Certificações</h3>
+                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Certifications</h3>
                         <div style="display: flex; flex-direction: column; gap: 8px;">
                             ${safeCertificacoes.map(cert => `
                                 <div>
@@ -434,14 +434,14 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
                 <div style="flex: 1;">
                     ${secoes_visiveis.perfil && resumo ? `
                     <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Perfil</h3>
+                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Profile</h3>
                         <p style="line-height: 1.7; text-align: justify;">${nl2br(resumo)}</p>
                     </div>
                     ` : ''}
                     
                     ${secoes_visiveis.experiencias && safeExperiencias.length > 0 ? `
                     <div style="margin-bottom: 24px;">
-                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Experiência</h3>
+                        <h3 style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #000; padding-bottom: 4px; margin-bottom: 12px;">Work Experience</h3>
                         ${safeExperiencias.map(exp => `
                             <div style="margin-bottom: 16px;">
                                 <div style="display: flex; justify-content: space-between; align-items: baseline;">
