@@ -1,5 +1,6 @@
 import React from 'react';
 import { CurriculoData, Customizacao } from '@/lib/types';
+import { typography, spacingMap, SpacingLevel } from '@/lib/designSystem';
 import { Mail, Phone, MapPin, Linkedin } from 'lucide-react';
 
 interface TemplateProps {
@@ -19,23 +20,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
     } as React.CSSProperties;
 
     // Define consistent spacing classes
-    const gapClass = {
-        'compacto': 'gap-2',
-        'normal': 'gap-4',
-        'amplo': 'gap-6'
-    }[espacamento];
-
-    const sidebarGapClass = {
-        'compacto': 'gap-4',
-        'normal': 'gap-8',
-        'amplo': 'gap-12'
-    }[espacamento];
-
-    const mbClass = {
-        'compacto': 'mb-3',
-        'normal': 'mb-6',
-        'amplo': 'mb-8'
-    }[espacamento];
+    const spacing = spacingMap[espacamento as SpacingLevel] || spacingMap.normal;
 
     return (
         <>
@@ -86,7 +71,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                 {/* Left Sidebar */}
                 <div
-                    className={`w-1/3 text-white p-6 flex flex-col ${sidebarGapClass} relative z-10`}
+                    className={`w-1/3 text-white p-6 flex flex-col ${spacing.gap} relative z-10`}
                     style={{
                         backgroundColor: customizacao.imagem_fundo?.tipo === 'lateral_esquerda' || customizacao.imagem_fundo?.tipo === 'inteiro'
                             ? `rgba(${parseInt(cores.primaria.slice(1, 3), 16)}, ${parseInt(cores.primaria.slice(3, 5), 16)}, ${parseInt(cores.primaria.slice(5, 7), 16)}, 0.85)`
@@ -107,7 +92,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
                         </div>
 
                         <div className="flex flex-col gap-3 text-sm">
-                            <h2 className="text-lg font-bold">Contact</h2>
+                            <h2 className={typography.section.title}>Contact</h2>
                             <div className="flex items-center gap-2 break-all">
                                 <Mail className="w-4 h-4 shrink-0" /> <span>{data.pessoal.email}</span>
                             </div>
@@ -128,7 +113,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                         {customizacao.secoes_visiveis.skills && data.skills.length > 0 && (
                             <div className="mt-4">
-                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Skills</h2>
+                                <h2 className={`${typography.section.title} border-white/30`}>Skills</h2>
                                 <div className="flex flex-wrap gap-2 justify-center">
                                     {data.skills.map((skill, i) => (
                                         <span key={i} className="bg-white/20 px-2 py-1 rounded text-xs">
@@ -141,7 +126,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                         {customizacao.secoes_visiveis.idiomas && data.idiomas.length > 0 && (
                             <div className="mt-4">
-                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Languages</h2>
+                                <h2 className={`${typography.section.title} border-white/30`}>Languages</h2>
                                 <div className="flex flex-col gap-2">
                                     {data.idiomas.map((lang, i) => (
                                         <div key={i} className="flex justify-between">
@@ -155,7 +140,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                         {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
                             <div className="mt-4">
-                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Education</h2>
+                                <h2 className={`${typography.section.title} border-white/30`}>Education</h2>
                                 <div className="flex flex-col gap-3 text-left">
                                     {data.educacao.map((edu, i) => (
                                         <div key={i}>
@@ -171,7 +156,7 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                         {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
                             <div className="mt-4">
-                                <h2 className="text-lg font-bold border-b border-white/30 pb-1 mb-2">Certifications</h2>
+                                <h2 className={`${typography.section.title} border-white/30`}>Certifications</h2>
                                 <div className="flex flex-col gap-2 text-left">
                                     {data.certificacoes.map((cert, i) => (
                                         <div key={i} className="text-sm">
@@ -188,24 +173,24 @@ export default function Template1({ data, customizacao }: TemplateProps) {
 
                 {/* Main Content */}
                 <div className="w-2/3 p-8 flex flex-col relative z-20" style={{ color: 'var(--color-text)' }}>
-                    <div className={mbClass}>
-                        <h1 className="text-3xl font-bold uppercase tracking-wider leading-tight" style={{ color: 'var(--color-primary)' }}>
+                    <div className={spacing.section}>
+                        <h1 className={typography.header.name} style={{ color: 'var(--color-primary)' }}>
                             {data.pessoal.nome} <span style={{ color: 'var(--color-secondary)' }}>{data.pessoal.sobrenome}</span>
                         </h1>
-                        <p className="text-lg font-medium mt-1 opacity-80">{data.pessoal.cargo}</p>
+                        <p className={`${typography.header.role} mt-2`} style={{ color: 'var(--color-secondary)' }}>{data.pessoal.cargo}</p>
                     </div>
 
                     {customizacao.secoes_visiveis.perfil && (
-                        <div className={`${mbClass} flex flex-col ${gapClass}`}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1" style={{ borderColor: 'var(--color-secondary)' }}>Profile</h3>
-                            <p className="text-justify leading-relaxed whitespace-pre-line">{data.resumo}</p>
+                        <div className={`${spacing.section} flex flex-col ${spacing.gap}`}>
+                            <h3 className={typography.section.title} style={{ borderColor: 'var(--color-secondary)' }}>Profile</h3>
+                            <p className={`${typography.body.text} text-justify whitespace-pre-line`}>{data.resumo}</p>
                         </div>
                     )}
 
                     {customizacao.secoes_visiveis.experiencias && data.experiencias.length > 0 && (
-                        <div className={mbClass}>
-                            <h3 className="text-lg font-bold uppercase border-b-2 pb-1 mb-3" style={{ borderColor: 'var(--color-secondary)' }}>Work Experience</h3>
-                            <div className={`flex flex-col ${gapClass}`}>
+                        <div className={spacing.section}>
+                            <h3 className={typography.section.title} style={{ borderColor: 'var(--color-secondary)' }}>Work Experience</h3>
+                            <div className={`flex flex-col ${spacing.gap}`}>
                                 {data.experiencias.map((exp, i) => (
                                     <div key={i}>
                                         <div className="flex justify-between items-baseline mb-1">

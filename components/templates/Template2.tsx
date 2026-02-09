@@ -1,6 +1,7 @@
 import React from 'react';
 import { CurriculoData, Customizacao } from '@/lib/types';
-import { Mail, Phone, MapPin, Globe } from 'lucide-react';
+import { typography, spacingMap, SpacingLevel } from '@/lib/designSystem';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 interface TemplateProps {
     data: CurriculoData;
@@ -17,11 +18,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
         fontFamily: fonte,
     } as React.CSSProperties;
 
-    const spacingClass = {
-        'compacto': 'gap-3',
-        'normal': 'gap-5',
-        'amplo': 'gap-8'
-    }[espacamento];
+    const spacing = spacingMap[espacamento as SpacingLevel] || spacingMap.normal;
 
     return (
         <div
@@ -62,8 +59,8 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                         />
                     )}
                     <div>
-                        <h1 className="text-5xl font-black tracking-tighter mb-2 uppercase">{data.pessoal.nome} {data.pessoal.sobrenome}</h1>
-                        <p className="text-xl opacity-90 font-medium tracking-widest">{data.pessoal.cargo}</p>
+                        <h1 className={typography.header.name}>{data.pessoal.nome} {data.pessoal.sobrenome}</h1>
+                        <p className={typography.header.role}>{data.pessoal.cargo}</p>
                     </div>
                 </div>
             </div>
@@ -79,19 +76,26 @@ export default function Template2({ data, customizacao }: TemplateProps) {
             <div className="flex flex-1 px-8 pb-8 gap-8 relative z-10">
 
                 {/* Main Column */}
-                <div className={`w-2/3 flex flex-col ${spacingClass}`}>
+                <div className={`w-2/3 flex flex-col ${spacing.gap}`}>
+                    {customizacao.secoes_visiveis.perfil && data.resumo && (
+                        <div>
+                            <h3 className={`${typography.section.title} border-none mb-4`} style={{ color: 'var(--color-primary)' }}>Profile</h3>
+                            <p className={`${typography.body.text} whitespace-pre-line`} style={{ color: 'var(--color-text)' }}>{data.resumo}</p>
+                        </div>
+                    )}
+
                     {customizacao.secoes_visiveis.experiencias && (
                         <div>
-                            <h3 className="text-xl font-bold uppercase mb-4 flex items-center gap-2" style={{ color: 'var(--color-primary)' }}>
-                                <span className="w-2 h-8 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
+                            <h3 className={`${typography.section.title} flex items-center gap-2 border-none mb-4`} style={{ color: 'var(--color-primary)' }}>
+                                <span className="w-2 h-4 rounded" style={{ backgroundColor: 'var(--color-secondary)' }}></span>
                                 Work Experience
                             </h3>
-                            <div className="flex flex-col gap-6">
+                            <div className={`flex flex-col ${spacing.gap}`}>
                                 {data.experiencias.map((exp, i) => (
                                     <div key={i} className="relative pl-4 border-l-2 border-gray-200">
                                         <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full" style={{ backgroundColor: 'var(--color-secondary)' }}></div>
-                                        <h4 className="font-bold text-lg">{exp.cargo}</h4>
-                                        <div className="text-sm font-semibold text-gray-700 mb-1 flex flex-wrap gap-2">
+                                        <h4 className="font-bold text-base" style={{ color: 'var(--color-text)' }}>{exp.cargo}</h4>
+                                        <div className={`text-sm font-semibold mb-1 flex flex-wrap gap-2 ${typography.body.text}`} style={{ color: 'var(--color-text)' }}>
                                             <span>{exp.empresa}</span>
                                             <span>|</span>
                                             <span>{exp.ano_inicio} - {exp.ano_fim || 'Atualmente'}</span>
@@ -103,13 +107,13 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                                             )}
                                         </div>
                                         {exp.formato === 'topicos' ? (
-                                            <ul className="list-disc list-inside text-gray-800 pl-2">
+                                            <ul className={`list-disc list-inside pl-2 ${typography.body.text}`} style={{ color: 'var(--color-text)' }}>
                                                 {exp.descricao.split('•').filter(Boolean).map((line, idx) => (
                                                     <li key={idx}>{line.trim()}</li>
                                                 ))}
                                             </ul>
                                         ) : (
-                                            <p className="text-gray-800 mb-2 whitespace-pre-line">{exp.descricao}</p>
+                                            <p className={`${typography.body.text} whitespace-pre-line`} style={{ color: 'var(--color-text)' }}>{exp.descricao}</p>
                                         )}
                                     </div>
                                 ))}
@@ -119,10 +123,10 @@ export default function Template2({ data, customizacao }: TemplateProps) {
                 </div>
 
                 {/* Side Column */}
-                <div className={`w-1/3 flex flex-col ${spacingClass}`}>
+                <div className={`w-1/3 flex flex-col ${spacing.gap}`}>
                     {customizacao.secoes_visiveis.skills && (
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Skills</h3>
+                            <h3 className={`${typography.section.title} border-none mb-4`} style={{ color: 'var(--color-primary)' }}>Skills</h3>
                             <div className="flex flex-wrap gap-2">
                                 {data.skills.map((skill, i) => (
                                     <span key={i} className="px-2 py-1 bg-white border border-gray-200 rounded text-xs font-semibold text-gray-800 shadow-sm">
@@ -135,7 +139,7 @@ export default function Template2({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.idiomas && (
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Languages</h3>
+                            <h3 className={`${typography.section.title} border-none mb-4`} style={{ color: 'var(--color-primary)' }}>Languages</h3>
                             <ul className="space-y-2">
                                 {data.idiomas.map((lang, i) => (
                                     <li key={i} className="flex justify-between border-b border-gray-200 pb-1 last:border-0">
@@ -149,13 +153,13 @@ export default function Template2({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.educacao && Array.isArray(data.educacao) && data.educacao.length > 0 && (
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Education</h3>
+                            <h3 className={`${typography.section.title} border-none mb-4`} style={{ color: 'var(--color-primary)' }}>Education</h3>
                             <div className="flex flex-col gap-4">
                                 {data.educacao.map((edu, i) => (
                                     <div key={i}>
-                                        <h4 className="font-bold text-sm">{edu.grau}</h4>
-                                        <div className="text-gray-700 font-medium text-xs">{edu.instituicao}</div>
-                                        <div className="text-xs text-gray-500">{edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}</div>
+                                        <h4 className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>{edu.grau}</h4>
+                                        <div className="font-medium text-xs" style={{ color: 'var(--color-text)', opacity: 0.9 }}>{edu.instituicao}</div>
+                                        <div className="text-xs" style={{ color: 'var(--color-text)', opacity: 0.75 }}>{edu.ano_inicio} - {edu.ano_fim || 'Atualmente'}</div>
                                     </div>
                                 ))}
                             </div>
@@ -164,12 +168,12 @@ export default function Template2({ data, customizacao }: TemplateProps) {
 
                     {customizacao.secoes_visiveis.certificacoes && Array.isArray(data.certificacoes) && data.certificacoes.length > 0 && (
                         <div className="bg-gray-50 p-4 rounded-lg">
-                            <h3 className="font-bold text-lg mb-4" style={{ color: 'var(--color-primary)' }}>Certifications</h3>
+                            <h3 className={`${typography.section.title} border-none mb-4`} style={{ color: 'var(--color-primary)' }}>Certifications</h3>
                             <div className="grid gap-3">
                                 {data.certificacoes.map((cert, i) => (
                                     <div key={i} className="border-l-4 pl-2" style={{ borderColor: 'var(--color-secondary)' }}>
-                                        <div className="font-bold text-gray-900 text-sm">{cert.nome}</div>
-                                        <div className="text-xs text-gray-600">{cert.emissor} • {cert.ano_obtencao}</div>
+                                        <div className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>{cert.nome}</div>
+                                        <div className="text-xs" style={{ color: 'var(--color-text)', opacity: 0.8 }}>{cert.emissor} • {cert.ano_obtencao}</div>
                                     </div>
                                 ))}
                             </div>

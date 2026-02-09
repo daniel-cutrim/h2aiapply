@@ -26,50 +26,37 @@ export default function PreviewPanel({ jobId, alunoId }: PreviewPanelProps) {
         setIsExporting(true);
 
         try {
-            const element = document.getElementById('resume-content');
-            if (!element) return;
-
-            const res = await fetch(`/api/curriculo/${curriculo.id}/export`, {
+            const res = await fetch('/api/generate-pdf', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    html: `
-                        <!DOCTYPE html>
-                        <html>
-                        <head>
-                            <meta charset="UTF-8">
-                            <script src="https://cdn.tailwindcss.com"></script>
-                            <style>
-                                @page { size: A4; margin: 0; }
-                                body { margin: 0; padding: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                                #resume-content { transform: none !important; }
-                            </style>
-                        </head>
-                        <body>
-                            ${element.outerHTML}
-                        </body>
-                        </html>
-                    `,
-                    token: curriculo.token
+                    dados: curriculo.dados,
+                    template_id: curriculo.template_id,
+                    customizacao: curriculo.customizacao
                 })
             });
 
-            if (!res.ok) throw new Error('Falha na exportação');
+            if (!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || 'Falha na exportação');
+            }
 
             const blob = await res.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `curriculo-${curriculo.dados.pessoal.nome || 'curriculo'}.pdf`;
+            // Sanitizar nome do arquivo
+            const nomeArquivo = `curriculo-${(curriculo.dados.pessoal.nome || 'download').toLowerCase().replace(/\s+/g, '-')}.pdf`;
+            a.download = nomeArquivo;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
 
         } catch (error) {
             console.error(error);
-            alert('Erro ao exportar PDF');
+            alert('Erro ao exportar PDF: ' + (error instanceof Error ? error.message : 'Erro desconhecido'));
         } finally {
             setIsExporting(false);
         }
