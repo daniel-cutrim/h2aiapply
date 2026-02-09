@@ -39,13 +39,14 @@ export default function PreviewPanel({ jobId, alunoId }: PreviewPanelProps) {
             });
 
             if (!res.ok) {
+                const errorText = await res.text();
                 let errorMessage = 'Falha na exportação';
+
                 try {
-                    const errData = await res.json();
+                    const errData = JSON.parse(errorText);
                     errorMessage = errData.error || errorMessage;
                 } catch {
-                    const textError = await res.text();
-                    errorMessage = textError || `Erro ${res.status}: ${res.statusText}`;
+                    errorMessage = errorText || `Erro ${res.status}: ${res.statusText}`;
                 }
                 throw new Error(errorMessage);
             }
