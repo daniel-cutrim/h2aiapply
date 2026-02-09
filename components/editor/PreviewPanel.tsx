@@ -39,8 +39,15 @@ export default function PreviewPanel({ jobId, alunoId }: PreviewPanelProps) {
             });
 
             if (!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.error || 'Falha na exportação');
+                let errorMessage = 'Falha na exportação';
+                try {
+                    const errData = await res.json();
+                    errorMessage = errData.error || errorMessage;
+                } catch {
+                    const textError = await res.text();
+                    errorMessage = textError || `Erro ${res.status}: ${res.statusText}`;
+                }
+                throw new Error(errorMessage);
             }
 
             const blob = await res.blob();

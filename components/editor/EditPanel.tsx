@@ -5,10 +5,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Palette, Type, Layout, Image as ImageIcon } from 'lucide-react';
 import { useTranslation } from '@/lib/hooks/useTranslation';
+import { supabase } from '@/lib/supabase';
 
 export default function EditPanel() {
     const { curriculo, updateDados, updateCustomizacao, setTemplate, isSaving } = useCurriculoStore();
     const [activeTab, setActiveTab] = useState('conteudo');
+    const [isUploading, setIsUploading] = useState(false);
     const { t } = useTranslation();
 
     if (!curriculo) return null;
@@ -77,17 +79,41 @@ export default function EditPanel() {
                                             type="file"
                                             accept="image/png, image/jpeg, image/jpg, image/webp"
                                             className="text-gray-900 bg-white dark:bg-slate-800 dark:text-gray-300 dark:border-slate-700 text-xs file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100 dark:file:bg-violet-900 dark:file:text-violet-300"
-                                            onChange={(e) => {
+                                            disabled={isUploading}
+                                            onChange={async (e) => {
                                                 const file = e.target.files?.[0];
                                                 if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onloadend = () => {
-                                                        updateDados({ pessoal: { ...dados.pessoal, foto_url: reader.result as string } });
-                                                    };
-                                                    reader.readAsDataURL(file);
+                                                    setIsUploading(true);
+                                                    try {
+                                                        const fileExt = file.name.split('.').pop();
+                                                        const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9]/g, '')}.${fileExt}`;
+                                                        const filePath = `public/${fileName}`;
+
+                                                        const { error: uploadError } = await supabase.storage
+                                                            .from('photo_curriculos')
+                                                            .upload(filePath, file);
+
+                                                        if (uploadError) {
+                                                            throw uploadError;
+                                                        }
+
+                                                        const { data } = supabase.storage
+                                                            .from('photo_curriculos')
+                                                            .getPublicUrl(filePath);
+
+                                                        if (data) {
+                                                            updateDados({ pessoal: { ...dados.pessoal, foto_url: data.publicUrl } });
+                                                        }
+                                                    } catch (error) {
+                                                        console.error('Erro ao fazer upload:', error);
+                                                        alert('Erro ao fazer upload da imagem. Verifique se você está logado ou se o bucket existe.');
+                                                    } finally {
+                                                        setIsUploading(false);
+                                                    }
                                                 }
                                             }}
                                         />
+                                        {isUploading && <span className="text-xs text-blue-600 animate-pulse">Enviando...</span>}
                                         {dados.pessoal.foto_url && (
                                             <Button
                                                 variant="ghost"
