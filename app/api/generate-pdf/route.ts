@@ -29,28 +29,35 @@ export async function POST(req: Request) {
             targetUrl = targetUrl.replace(/\/$/, '') + '/pdf-from-html';
         }
 
-        console.log(`[API] Calling Puppeteer at: ${targetUrl}`);
-
-        const response = await fetch(targetUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                html: fullHtml,
-                format: 'A4',
-                margin: { top: '0', right: '0', bottom: '0', left: '0' },
-                waitFor: 500
-            })
-        });
+        let response;
+        try {
+            console.log(`[API] Calling Puppeteer at: ${targetUrl}`);
+            response = await fetch(targetUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    html: fullHtml,
+                    format: 'A4',
+                    margin: { top: '0', right: '0', bottom: '0', left: '0' },
+                    waitFor: 500
+                })
+            });
+        } catch (fetchError: any) {
+            console.error(`[API] Network Error connecting to Puppeteer: ${fetchError.message}`);
+            return NextResponse.json({
+                error: `Erro de conexão com serviço de PDF: ${fetchError.message}`,
+                details: 'Verifique se o serviço Puppeteer está online e acessível.'
+            }, { status: 503 });
+        }
 
         if (!response.ok) {
             const errText = await response.text();
             console.error(`[API] Puppeteer Error: ${response.status} ${response.statusText} - ${errText}`);
-            // Return explicit error context
             return NextResponse.json({
-                error: `Upstream Puppeteer Service Error: ${response.status}`,
+                error: `Erro no serviço de PDF (${response.status})`,
                 details: errText,
                 url_used: targetUrl
-            }, { status: response.status }); // Pass through the status code (e.g., 405)
+            }, { status: 500 });
         }
 
         const data = await response.json();
