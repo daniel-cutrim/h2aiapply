@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { generateResumeHtml } from '@/lib/htmlTemplates';
+import fs from 'fs';
+import path from 'path';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -13,8 +15,39 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Dados inválidos ou incompletos.' }, { status: 400 });
         }
 
+        // Optimizing Background Images for Puppeteer
+        // 1. Presets: Read directly from filesystem and embed as Base64 (avoids network/DNS issues)
+        // 2. External URLs: Keep as is (Puppeteer will fetch them)
+        const resolvedCustomizacao = { ...customizacao };
+
+        if (resolvedCustomizacao?.imagem_fundo?.url) {
+            const bgUrl = resolvedCustomizacao.imagem_fundo.url;
+
+            // Check if it's a local preset (starts with /backgrounds/ or contains it)
+            if (bgUrl.includes('/backgrounds/')) {
+                try {
+                    const filename = bgUrl.split('/').pop(); // e.g., '4.png'
+                    if (filename) {
+                        const filePath = path.join(process.cwd(), 'public', 'backgrounds', filename);
+                        if (fs.existsSync(filePath)) {
+                            const fileBuffer = fs.readFileSync(filePath);
+                            const base64Image = `data:image/png;base64,${fileBuffer.toString('base64')}`;
+                            resolvedCustomizacao.imagem_fundo.url = base64Image;
+                            console.log(`[API] Embedded preset ${filename} as Base64`);
+                        } else {
+                            console.warn(`[API] Preset file not found: ${filePath}`);
+                        }
+                    }
+                } catch (e) {
+                    console.error('[API] Error reading preset file:', e);
+                }
+            }
+            // Logic for resolving other relative paths (if any) could stay here, 
+            // but effectively we only have presets as relative paths now.
+        }
+
         // Generate HTML using pure template strings (no React SSR)
-        const fullHtml = generateResumeHtml(dados, template_id || 'template_1', customizacao || {});
+        const fullHtml = generateResumeHtml(dados, template_id || 'template_1', resolvedCustomizacao || {});
 
         // Send to Puppeteer URL
         const puppeteerUrl = process.env.PUPPETEER_API_URL;
@@ -39,7 +72,8 @@ export async function POST(req: Request) {
                     html: fullHtml,
                     format: 'A4',
                     margin: { top: '0', right: '0', bottom: '0', left: '0' },
-                    waitFor: 500
+                    printBackground: true,
+                    waitFor: 7000
                 })
             });
         } catch (fetchError: any) {

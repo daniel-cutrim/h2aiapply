@@ -827,11 +827,11 @@ export default function EditPanel() {
                                         {['4.png', '5.png', '6.png'].map((bg) => (
                                             <button
                                                 key={bg}
-                                                className={`w-16 h-16 rounded border-2 overflow-hidden shrink-0 transition-all ${customizacao.imagem_fundo?.url === `/backgrounds/${bg}` ? 'border-[#fe4a21]' : 'border-transparent hover:border-gray-300'}`}
+                                                className={`w-16 h-16 rounded border-2 overflow-hidden shrink-0 transition-all ${customizacao.imagem_fundo?.url?.endsWith(`/backgrounds/${bg}`) ? 'border-[#fe4a21]' : 'border-transparent hover:border-gray-300'}`}
                                                 onClick={() => updateCustomizacao({
                                                     imagem_fundo: {
-                                                        url: `/backgrounds/${bg}`,
-                                                        tipo: customizacao.imagem_fundo?.tipo || 'lateral_esquerda',
+                                                        url: `${window.location.origin}/backgrounds/${bg}`,
+                                                        tipo: 'inteiro', // Force Full Page to avoid "cut" look
                                                         opacidade: customizacao.imagem_fundo?.opacidade ?? 0.1,
                                                         escala: customizacao.imagem_fundo?.escala ?? 1,
                                                         posicao_x: customizacao.imagem_fundo?.posicao_x ?? 50,
@@ -852,24 +852,44 @@ export default function EditPanel() {
                                         type="file"
                                         accept="image/png, image/jpeg, image/jpg, image/webp"
                                         className="text-xs text-gray-900 bg-gray-50 dark:bg-slate-900 dark:text-gray-100 dark:border-slate-600 cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20 dark:file:bg-slate-800 dark:file:text-white"
-                                        onChange={(e) => {
+                                        onChange={async (e) => {
                                             const file = e.target.files?.[0];
                                             if (file) {
-                                                const reader = new FileReader();
-                                                reader.onloadend = () => {
-                                                    updateCustomizacao({
-                                                        imagem_fundo: {
-                                                            url: reader.result as string,
-                                                            tipo: customizacao.imagem_fundo?.tipo || 'lateral_esquerda',
-                                                            opacidade: 0.1,
-                                                            escala: 1,
-                                                            posicao_x: 50,
-                                                            posicao_y: 50,
-                                                            rotacao: 0
-                                                        }
-                                                    });
-                                                };
-                                                reader.readAsDataURL(file);
+                                                setIsUploading(true);
+                                                try {
+                                                    const fileExt = file.name.split('.').pop();
+                                                    const fileName = `bg-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9]/g, '')}.${fileExt}`;
+                                                    const filePath = `public/${fileName}`;
+
+                                                    const { error: uploadError } = await supabase.storage
+                                                        .from('photo_curriculos')
+                                                        .upload(filePath, file);
+
+                                                    if (uploadError) throw uploadError;
+
+                                                    const { data } = supabase.storage
+                                                        .from('photo_curriculos')
+                                                        .getPublicUrl(filePath);
+
+                                                    if (data) {
+                                                        updateCustomizacao({
+                                                            imagem_fundo: {
+                                                                url: data.publicUrl,
+                                                                tipo: 'inteiro', // Default to Full Page for new uploads to prevent "cut" confusion
+                                                                opacidade: 0.1,
+                                                                escala: 1,
+                                                                posicao_x: 50,
+                                                                posicao_y: 50,
+                                                                rotacao: 0
+                                                            }
+                                                        });
+                                                    }
+                                                } catch (error) {
+                                                    console.error('Erro ao fazer upload do fundo:', error);
+                                                    alert('Erro ao fazer upload da imagem de fundo.');
+                                                } finally {
+                                                    setIsUploading(false);
+                                                }
                                             }
                                         }}
                                     />

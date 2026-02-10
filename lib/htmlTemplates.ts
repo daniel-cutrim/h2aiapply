@@ -349,20 +349,8 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
     const safeCertificacoes = Array.isArray(certificacoes) ? certificacoes : [];
     const safeExperiencias = Array.isArray(experiencias) ? experiencias : [];
 
-    // Check if background image needs clip for template 3 left sidebar (25% width approx)
-    let backgroundHtml = '';
-    if (custom.imagem_fundo?.url) {
-        const { url, tipo, opacidade, escala = 1, posicao_x = 50, posicao_y = 50, rotacao = 0 } = custom.imagem_fundo;
-        let clipPath = 'none';
-        if (tipo === 'lateral_esquerda') clipPath = 'polygon(0 0, 30% 0, 30% 100%, 0 100%)'; // Approx 25% + padding
-        if (tipo === 'cabecalho') clipPath = 'polygon(0 0, 100% 0, 100% 200px, 0 200px)';
-
-        backgroundHtml = `
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; clip-path: ${clipPath}; -webkit-clip-path: ${clipPath};">
-            <img src="${url}" style="position: absolute; width: 100%; height: 100%; object-fit: cover; opacity: ${opacidade}; transform-origin: center center; transform: translate(${posicao_x - 50}%, ${posicao_y - 50}%) scale(${escala}) rotate(${rotacao}deg);">
-        </div>
-        `;
-    }
+    // Use standard background generator
+    const backgroundHtml = generateBackgroundHtml(custom);
 
     return `
         <div style="width: 210mm; min-height: 297mm; font-family: ${custom.fonte}; font-size: 14px; color: #000; background: white; padding: 48px; position: relative; overflow: hidden;">
