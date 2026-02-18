@@ -129,7 +129,7 @@ function generateTemplate1(data: CurriculoData, custom: Customizacao): string {
     `).join('');
 
     return `
-        <div style="width: 210mm; min-height: 297mm; display: flex; font-family: ${custom.fonte}; font-size: 14px; color: ${cores.texto}; background: white; position: relative; overflow: hidden;">
+        <div style="width: 210mm; display: flex; font-family: ${custom.fonte}; font-size: 14px; color: ${cores.texto}; background: white; position: relative; overflow: hidden;">
             ${backgroundHtml}
             
             <!-- Sidebar -->
@@ -228,7 +228,7 @@ function generateTemplate2(data: CurriculoData, custom: Customizacao): string {
     const safeExperiencias = Array.isArray(experiencias) ? experiencias : [];
 
     return `
-        <div style="width: 210mm; min-height: 297mm; font-family: ${custom.fonte}; font-size: 14px; color: ${cores.texto}; background: white; position: relative; overflow: hidden;">
+        <div style="width: 210mm; font-family: ${custom.fonte}; font-size: 14px; color: ${cores.texto}; background: white; position: relative; overflow: hidden;">
             ${backgroundHtml}
 
             <!-- Header -->
@@ -353,7 +353,7 @@ function generateTemplate3(data: CurriculoData, custom: Customizacao): string {
     const backgroundHtml = generateBackgroundHtml(custom);
 
     return `
-        <div style="width: 210mm; min-height: 297mm; font-family: ${custom.fonte}; font-size: 14px; color: #000; background: white; padding: 48px; position: relative; overflow: hidden;">
+        <div style="width: 210mm; font-family: ${custom.fonte}; font-size: 14px; color: #000; background: white; padding: 48px; position: relative; overflow: hidden;">
             ${backgroundHtml}
             
             <!-- Header -->
@@ -489,7 +489,7 @@ export function generateResumeHtml(
         <head>
             <meta charset="UTF-8">
             <style>
-                @page { size: A4; margin: 0; }
+                @page { size: auto; margin: 0; }
                 * { margin: 0; padding: 0; box-sizing: border-box; }
                 body { 
                     margin: 0; 
