@@ -45,14 +45,8 @@ export async function POST(
             },
             body: JSON.stringify({
                 html,
-                format: 'A4',
-                margin: {
-                    top: '20px',
-                    right: '20px',
-                    bottom: '20px',
-                    left: '20px'
-                },
-                waitFor: 100
+                singlePage: true,
+                pageWidth: 794
             })
         });
 

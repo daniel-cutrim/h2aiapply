@@ -70,10 +70,8 @@ export async function POST(req: Request) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     html: fullHtml,
-                    format: 'A4',
-                    margin: { top: '0', right: '0', bottom: '0', left: '0' },
-                    printBackground: true,
-                    waitFor: 7000
+                    singlePage: true,
+                    pageWidth: 794
                 })
             });
         } catch (fetchError: any) {
